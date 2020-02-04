@@ -5,10 +5,10 @@ module.exports = [
     createdAt: new Date(Date.UTC(2019, 3, 30, 17, 20, 0)),
     user: {
       _id: 1,
-      name: 'Developer'
+      name: 'Developer',
     },
     sent: true,
-    received: true
+    received: true,
     // location: {
     //   latitude: 48.864601,
     //   longitude: 2.398704
@@ -20,13 +20,13 @@ module.exports = [
     createdAt: new Date(Date.UTC(2019, 3, 30, 17, 20, 0)),
     user: {
       _id: 2,
-      name: 'React Native'
-    }
+      name: 'React Native',
+    },
   },
   {
     _id: Math.round(Math.random() * 1000000),
     text: 'You are officially rocking GiftedChat.',
     createdAt: new Date(Date.UTC(2019, 3, 30, 17, 20, 0)),
-    system: true
-  }
+    system: true,
+  },
 ]

@@ -9,9 +9,8 @@ import { ListItem } from 'react-native-elements'
 import req from '@Network'
 
 @connect(state => ({
-  user: state.app.user
+  user: state.app.user,
 }))
-
 export default class HomeScreen extends React.Component {
   static navigationOptions = _ => {
     return {
@@ -29,7 +28,7 @@ export default class HomeScreen extends React.Component {
         color: '#09f',
         onPress() {
           this.props.navigation.navigate('Language')
-        }
+        },
       },
       {
         title: t('settings.feedback'),
@@ -37,7 +36,7 @@ export default class HomeScreen extends React.Component {
         color: '#0c9',
         onPress() {
           this.props.navigation.navigate('Feedback')
-        }
+        },
       },
       {
         title: t('settings.about'),
@@ -45,8 +44,8 @@ export default class HomeScreen extends React.Component {
         color: '#fc3',
         onPress() {
           this.props.navigation.navigate('About')
-        }
-      }
+        },
+      },
     ]
   }
 
@@ -60,30 +59,36 @@ export default class HomeScreen extends React.Component {
           leftAvatar={{
             size: 65,
             source: {
-              uri: this.props.user.avatar_url
-            }
+              uri: this.props.user.avatar_url,
+            },
           }}
           title={this.props.user.nick_name}
           titleStyle={{ fontSize: 23 }}
           subtitle={t('settings.location') + ': ' + this.props.user.location}
           subtitleStyle={{ fontSize: 16, color: '#858585' }}
-          onPress={_ => { this.props.navigation.navigate('Profile') }}
+          onPress={_ => {
+            this.props.navigation.navigate('Profile')
+          }}
         />
-        {
-          this.menuList.map((item, i) => (
-            <View style={viewStyles.list} key={i}>
-              <ListItem
-                containerStyle={viewStyles.listItem}
-                chevron
-                topDivider
-                bottomDivider
-                title={item.title}
-                onPress={item.onPress.bind(this)}
-                leftIcon={<Icon style={{ marginTop: 4 }} name={item.icon} color={item.color}/>}
-              />
-            </View>
-          ))
-        }
+        {this.menuList.map((item, i) => (
+          <View style={viewStyles.list} key={i}>
+            <ListItem
+              containerStyle={viewStyles.listItem}
+              chevron
+              topDivider
+              bottomDivider
+              title={item.title}
+              onPress={item.onPress.bind(this)}
+              leftIcon={
+                <Icon
+                  style={{ marginTop: 4 }}
+                  name={item.icon}
+                  color={item.color}
+                />
+              }
+            />
+          </View>
+        ))}
       </View>
     )
   }
@@ -92,13 +97,13 @@ export default class HomeScreen extends React.Component {
 const viewStyles = StyleSheet.create({
   container: {
     ...styles.container,
-    paddingTop: 15
+    paddingTop: 15,
   },
   list: {
-    marginTop: 10
+    marginTop: 10,
   },
   listItem: {
     paddingTop: 8,
-    paddingBottom: 8
-  }
+    paddingBottom: 8,
+  },
 })

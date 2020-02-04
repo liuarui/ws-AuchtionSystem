@@ -12,13 +12,12 @@ class Storage {
       return AsyncStorage.getItem(key).then(value => {
         return JSON.parse(value)
       })
-    } else {
-      return AsyncStorage.multiGet(key).then(values => {
-        return values.map(value => {
-          return JSON.parse(value[1])
-        })
-      })
     }
+    return AsyncStorage.multiGet(key).then(values => {
+      return values.map(value => {
+        return JSON.parse(value[1])
+      })
+    })
   }
 
   /**
@@ -30,12 +29,12 @@ class Storage {
   save(key, value) {
     if (!Array.isArray(key)) {
       return AsyncStorage.setItem(key, JSON.stringify(value))
-    } else {
-      const pairs = key.map(function (pair) {
-        return [pair[0], JSON.stringify(pair[1])]
-      })
-      return AsyncStorage.multiSet(pairs)
     }
+    const pairs = key.map(function(pair) {
+      return [pair[0], JSON.stringify(pair[1])]
+    })
+
+    return AsyncStorage.multiSet(pairs)
   }
 
   /**
@@ -59,9 +58,8 @@ class Storage {
   delete(key) {
     if (Array.isArray(key)) {
       return AsyncStorage.multiRemove(key)
-    } else {
-      return AsyncStorage.removeItem(key)
     }
+    return AsyncStorage.removeItem(key)
   }
 
   /**

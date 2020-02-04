@@ -4,70 +4,63 @@
  * https://github.com/FaridSafi/react-native-gifted-chat
  */
 
-import React from 'react'
-import config from '@Config'
-import t from '@Localize'
-import styles from '@Styles'
-import HeaderButton from '@Components/HeaderButton'
+import React from 'react';
+import config from '@Config';
+import t from '@Localize';
+import styles from '@Styles';
+import HeaderButton from '@Components/HeaderButton';
 
 import {
   GiftedChat,
   Actions,
   Bubble,
-  SystemMessage
-} from 'react-native-gifted-chat'
+  SystemMessage,
+} from 'react-native-gifted-chat';
 
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native';
 
-import {
-  Header
-} from 'react-native-elements'
+import { Header } from 'react-native-elements';
 
 export default class MessageScreen extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       messages: [],
       loadEarlier: true,
       typingText: null,
-      isLoadingEarlier: false
-    }
+      isLoadingEarlier: false,
+    };
 
-    this._isMounted = false
-    this.onSend = this.onSend.bind(this)
-    this.onReceive = this.onReceive.bind(this)
-    this.renderBubble = this.renderBubble.bind(this)
-    this.renderSystemMessage = this.renderSystemMessage.bind(this)
-    this.renderFooter = this.renderFooter.bind(this)
-    this.onLoadEarlier = this.onLoadEarlier.bind(this)
+    this._isMounted = false;
+    this.onSend = this.onSend.bind(this);
+    this.onReceive = this.onReceive.bind(this);
+    this.renderBubble = this.renderBubble.bind(this);
+    this.renderSystemMessage = this.renderSystemMessage.bind(this);
+    this.renderFooter = this.renderFooter.bind(this);
+    this.onLoadEarlier = this.onLoadEarlier.bind(this);
 
-    this._isAlright = null
+    this._isAlright = null;
   }
 
   componentDidMount() {
-    this._isMounted = true
+    this._isMounted = true;
     this.setState(() => {
       return {
-        messages: require('./mock/messages.js')
-      }
-    })
+        messages: require('./mock/messages.js'),
+      };
+    });
   }
 
   componentWillUnmount() {
-    this._isMounted = false
+    this._isMounted = false;
   }
 
   onLoadEarlier() {
     this.setState(previousState => {
       return {
-        isLoadingEarlier: true
-      }
-    })
+        isLoadingEarlier: true,
+      };
+    });
 
     setTimeout(() => {
       if (this._isMounted === true) {
@@ -75,25 +68,25 @@ export default class MessageScreen extends React.Component {
           return {
             messages: GiftedChat.prepend(
               previousState.messages,
-              require('./mock/old_messages.js')
+              require('./mock/old_messages.js'),
             ),
             loadEarlier: false,
-            isLoadingEarlier: false
-          }
-        })
+            isLoadingEarlier: false,
+          };
+        });
       }
-    }, 1000) // simulating network
+    }, 1000); // simulating network
   }
 
   onSend(messages = []) {
     this.setState(previousState => {
       return {
-        messages: GiftedChat.append(previousState.messages, messages)
-      }
-    })
+        messages: GiftedChat.append(previousState.messages, messages),
+      };
+    });
 
     // for demo purpose
-    this.answerDemo(messages)
+    this.answerDemo(messages);
   }
 
   answerDemo(messages) {
@@ -101,9 +94,9 @@ export default class MessageScreen extends React.Component {
       if (messages[0].image || messages[0].location || !this._isAlright) {
         this.setState(previousState => {
           return {
-            typingText: 'React Native is typing'
-          }
-        })
+            typingText: 'React Native is typing',
+          };
+        });
       }
     }
 
@@ -111,24 +104,22 @@ export default class MessageScreen extends React.Component {
       if (this._isMounted === true) {
         if (messages.length > 0) {
           if (messages[0].image) {
-            this.onReceive('Nice picture!')
+            this.onReceive('Nice picture!');
           } else if (messages[0].location) {
-            this.onReceive('My favorite place')
-          } else {
-            if (!this._isAlright) {
-              this._isAlright = true
-              this.onReceive('Alright')
-            }
+            this.onReceive('My favorite place');
+          } else if (!this._isAlright) {
+            this._isAlright = true;
+            this.onReceive('Alright');
           }
         }
       }
 
       this.setState(previousState => {
         return {
-          typingText: null
-        }
-      })
-    }, 1000)
+          typingText: null,
+        };
+      });
+    }, 1000);
   }
 
   onReceive(text) {
@@ -140,12 +131,12 @@ export default class MessageScreen extends React.Component {
           createdAt: new Date(),
           user: {
             _id: 2,
-            name: 'React Native'
+            name: 'React Native',
             // avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          }
-        })
-      }
-    })
+          },
+        }),
+      };
+    });
   }
 
   renderBubble(props) {
@@ -154,11 +145,11 @@ export default class MessageScreen extends React.Component {
         {...props}
         wrapperStyle={{
           left: {
-            backgroundColor: '#f0f0f0'
-          }
+            backgroundColor: '#f0f0f0',
+          },
         }}
       />
-    )
+    );
   }
 
   renderSystemMessage(props) {
@@ -166,13 +157,13 @@ export default class MessageScreen extends React.Component {
       <SystemMessage
         {...props}
         containerStyle={{
-          marginBottom: 15
+          marginBottom: 15,
         }}
         textStyle={{
-          fontSize: 14
+          fontSize: 14,
         }}
       />
-    )
+    );
   }
 
   renderFooter(props) {
@@ -181,19 +172,30 @@ export default class MessageScreen extends React.Component {
         <View style={viewStyles.footerContainer}>
           <Text style={viewStyles.footerText}>{this.state.typingText}</Text>
         </View>
-      )
+      );
     }
-    return null
+    return null;
   }
 
   render() {
-    const { user } = this.props.navigation.state.params
+    const { user } = this.props.navigation.state.params;
 
     return (
       <View style={viewStyles.container}>
         <Header
-          leftComponent={<HeaderButton text={ t('global.back') } icon={ 'ios7arrowleft' } onPressButton={ _ => { this.props.navigation.goBack() } }/>}
-          centerComponent={{ text: user.nickname, style: styles.modalHeader.center }}
+          leftComponent={
+            <HeaderButton
+              text={t('global.back')}
+              icon={'ios7arrowleft'}
+              onPressButton={_ => {
+                this.props.navigation.goBack();
+              }}
+            />
+          }
+          centerComponent={{
+            text: user.nickname,
+            style: styles.modalHeader.center,
+          }}
           containerStyle={{
             backgroundColor: config.mainColor,
           }}
@@ -205,14 +207,14 @@ export default class MessageScreen extends React.Component {
           onLoadEarlier={this.onLoadEarlier}
           isLoadingEarlier={this.state.isLoadingEarlier}
           user={{
-            _id: 1 // sent messages should have same user._id
+            _id: 1, // sent messages should have same user._id
           }}
           renderBubble={this.renderBubble}
           renderSystemMessage={this.renderSystemMessage}
           renderFooter={this.renderFooter}
         />
       </View>
-    )
+    );
   }
 }
 
@@ -224,10 +226,10 @@ const viewStyles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 10,
     marginRight: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   footerText: {
     fontSize: 14,
-    color: '#aaa'
-  }
-})
+    color: '#aaa',
+  },
+});

@@ -8,27 +8,30 @@ export const prependTimeline = createAction(types.PREPEND_TIMELINE)
 export const updatePost = createAction(types.UPDATE_POST)
 
 export function fetchTimeline() {
-  return (dispatch) => {
+  return dispatch => {
     return req.get('/timeline.json').then(res => {
       const data = res.data
+
       dispatch(initTimeline(data))
     })
   }
 }
 
 export function refreshTimeline() {
-  return (dispatch) => {
+  return dispatch => {
     return req.get('/refresh_timeline.json').then(res => {
       const data = res.data
+
       dispatch(prependTimeline(data))
     })
   }
 }
 
 export function loadMoreTimeline() {
-  return (dispatch) => {
+  return dispatch => {
     return req.get('/more_timeline.json').then(res => {
       const data = res.data
+
       dispatch(appendTimeline(data))
     })
   }

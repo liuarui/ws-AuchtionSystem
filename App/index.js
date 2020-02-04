@@ -17,7 +17,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isTranslationLoaded: false
+      isTranslationLoaded: false,
     }
     setI18nConfig()
       .then(() => {
@@ -47,7 +47,7 @@ export default class App extends React.Component {
     }
     return (
       <Provider store={store}>
-        <StatusBar barStyle='light-content' />
+        <StatusBar barStyle="light-content" />
         <AppContainer />
         <Modals />
       </Provider>
@@ -57,6 +57,6 @@ export default class App extends React.Component {
 
 const viewStyles = StyleSheet.create({
   safeArea: {
-    ...styles.container
-  }
+    ...styles.container,
+  },
 })
