@@ -18,7 +18,10 @@ class Storage {
         return JSON.parse(value[1])
       })
     })
+<<<<<<< HEAD:RN/App/Utils/storage.js
 
+=======
+>>>>>>> 465fd0d2e97a74c7c7e7d5c125a4109d94d6871e:App/Utils/storage.js
   }
 
   /**
@@ -31,12 +34,19 @@ class Storage {
     if (!Array.isArray(key)) {
       return AsyncStorage.setItem(key, JSON.stringify(value))
     }
+<<<<<<< HEAD:RN/App/Utils/storage.js
     const pairs = key.map(function (pair) {
+=======
+    const pairs = key.map(function(pair) {
+>>>>>>> 465fd0d2e97a74c7c7e7d5c125a4109d94d6871e:App/Utils/storage.js
       return [pair[0], JSON.stringify(pair[1])]
     })
 
     return AsyncStorage.multiSet(pairs)
+<<<<<<< HEAD:RN/App/Utils/storage.js
 
+=======
+>>>>>>> 465fd0d2e97a74c7c7e7d5c125a4109d94d6871e:App/Utils/storage.js
   }
 
   /**
@@ -62,7 +72,10 @@ class Storage {
       return AsyncStorage.multiRemove(key)
     }
     return AsyncStorage.removeItem(key)
+<<<<<<< HEAD:RN/App/Utils/storage.js
 
+=======
+>>>>>>> 465fd0d2e97a74c7c7e7d5c125a4109d94d6871e:App/Utils/storage.js
   }
 
   /**

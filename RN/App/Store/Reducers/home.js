@@ -1,6 +1,7 @@
-import { handleActions } from 'redux-actions'
-import types from '../Types'
+import { handleActions } from 'redux-actions';
+import types from '../Types';
 
+<<<<<<< HEAD:RN/App/Store/Reducers/home.js
 export default handleActions({
   [types.INIT_TIMELINE] (state, action) {
     return {
@@ -40,3 +41,44 @@ export default handleActions({
 }, {
   timeline: []
 })
+=======
+export default handleActions(
+  {
+    [types.INIT_TIMELINE](state, action) {
+      return {
+        ...state,
+        timeline: action.payload,
+      };
+    },
+    [types.PREPEND_TIMELINE](state, action) {
+      return {
+        ...state,
+        timeline: [...action.payload, ...state.timeline],
+      };
+    },
+    [types.APPEND_TIMELINE](state, action) {
+      return {
+        ...state,
+        timeline: [...state.timeline, ...action.payload],
+      };
+    },
+    [types.UPDATE_POST](state, action) {
+      const { mid, key, value } = action.payload;
+
+      return {
+        ...state,
+        timeline: state.timeline.map((item, i) => {
+          if (item.id === mid) {
+            item[key] = value;
+            return { ...item };
+          }
+          return item;
+        }),
+      };
+    },
+  },
+  {
+    timeline: [],
+  },
+);
+>>>>>>> 465fd0d2e97a74c7c7e7d5c125a4109d94d6871e:App/Store/Reducers/home.js

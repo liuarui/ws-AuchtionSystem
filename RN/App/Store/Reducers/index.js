@@ -6,5 +6,5 @@ import contacts from './contacts'
 export default combineReducers({
   app,
   home,
-  contacts
+  contacts,
 })
