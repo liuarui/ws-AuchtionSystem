@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, FlatList, TextInput, Button, ToastAndroid } from 'react-native'
-// socket io 客户端包
-import io from 'socket.io-client'
 
 export default class App extends Component {
   constructor(props) {
@@ -18,46 +16,40 @@ export default class App extends Component {
   componentDidMount() {}
   // 创建websocket函数
   WebSocketConnect() {
-    let ws = io('ws://liuarui.top:6633')
+    let ws = new WebSocket('ws://liuarui.top:6633')
 
-    ws.on('msg', function(data) {
-      ws.emit('msg', { rp: '6666' }) //向服务器发送消息
-      console.log(data)
-    })
+    ws.onopen = () => {
+      ws.send('有不知名用户进入聊天室') // send a message
+      ToastAndroid.show(`加入聊天室成功`, ToastAndroid.SHORT)
+    }
+    ws.onmessage = e => {
+      // a message was received
+      let temp = this.state.list
 
-    // ws.onopen = () => {
-    //   ws.send('有不知名用户进入聊天室') // send a message
-    //   ToastAndroid.show(`加入聊天室成功`, ToastAndroid.SHORT)
-    // }
-    // ws.onmessage = e => {
-    //   // a message was received
-    //   let temp = this.state.list
-
-    //   console.log('服务端发来消息', e.data)
-    //   temp.push(e.data)
-    //   this.setState({
-    //     list: temp,
-    //   })
-    // }
-    // ws.onerror = e => {
-    //   console.log('错误信息', e.message)
-    //   ToastAndroid.show(`${e.message}`, ToastAndroid.SHORT)
-    // }
-    // ws.onclose = e => {
-    //   ws.send('不知名用户退出聊天室')
-    //   console.log('退出信息', e.code, e.reason)
-    // }
+      console.log('服务端发来消息', e.data)
+      temp.push(e.data)
+      this.setState({
+        list: temp,
+      })
+    }
+    ws.onerror = e => {
+      console.log('错误信息', e.message)
+      ToastAndroid.show(`${e.message}`, ToastAndroid.SHORT)
+    }
+    ws.onclose = e => {
+      ws.send('不知名用户退出聊天室')
+      console.log('退出信息', e.code, e.reason)
+    }
     this.setState({
       ws: ws,
     })
   }
   sendMes() {
-    console.log('连接成功')
-    // this.state.ws.send(this.state.mes)
+    console.log('触发成功')
+    this.state.ws.send(this.state.mes)
   }
   outRoom() {
-    this.state.ws.socket.close()
-    console.log('退出成功')
+    this.state.ws.close()
   }
   render() {
     return (

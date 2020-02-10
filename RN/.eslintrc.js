@@ -120,7 +120,7 @@ module.exports = {
     'no-underscore-dangle': 1, //标识符不能以_开头或结尾
     'no-unneeded-ternary': 2, //禁止不必要的嵌套 var isYes = answer === 1 ? true : false;
     'no-unreachable': 2, //不能有无法执行的代码
-    'no-unused-expressions': 2, //禁止无用的表达式
+    // 'no-unused-expressions': 2, //禁止无用的表达式
     // 'no-unused-vars': [
     //   2,
     //   {
@@ -198,13 +198,11 @@ module.exports = {
     'max-nested-callbacks': [0, 2], //回调嵌套深度
     'max-params': [0, 3], //函数最多只能有3个参数
     'max-statements': [0, 10], //函数内最多有几个声明
-    'new-cap': 2, //函数名首行大写必须使用new方式调用，首行小写必须用不带new方式调用
     'new-parens': 2, //new时必须加小括号
     'newline-after-var': 2, //变量声明后是否需要空一行
     'object-curly-spacing': [0, 'never'], //大括号内是否允许不必要的空格
     'object-shorthand': 0, //强制对象字面量缩写语法
     'operator-assignment': [0, 'always'], //赋值运算符 += -=什么的
-    'operator-linebreak': [2, 'after'], //换行时运算符在行尾还是行首
     'padded-blocks': 0, //块语句内行首行尾是否要空行
     'prefer-const': 0, //首选const
     'prefer-spread': 0, //首选展开运算
