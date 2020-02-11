@@ -117,7 +117,7 @@ module.exports = {
     'no-undef-init': 2, //变量初始化时不能直接给它赋值为undefined
     'no-undefined': 0, //不能使用undefined
     'no-unexpected-multiline': 2, //避免多行表达式
-    'no-underscore-dangle': 1, //标识符不能以_开头或结尾
+    // 'no-underscore-dangle': 1, //标识符不能以_开头或结尾
     'no-unneeded-ternary': 2, //禁止不必要的嵌套 var isYes = answer === 1 ? true : false;
     'no-unreachable': 2, //不能有无法执行的代码
     // 'no-unused-expressions': 2, //禁止无用的表达式
@@ -167,7 +167,7 @@ module.exports = {
     'consistent-this': [2, 'that'], //this别名
     'constructor-super': 0, //非派生类不能调用super，派生类必须调用super
     curly: [2, 'all'], //必须使用 if(){} 中的{}
-    'default-case': 2, //switch语句最后必须有default
+    // 'default-case': 2, //switch语句最后必须有default
     'dot-location': 0, //对象访问符的位置，换行的时候在行首还是行尾
     'dot-notation': [
       0,

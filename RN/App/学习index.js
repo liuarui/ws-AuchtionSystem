@@ -1,13 +1,15 @@
 import React from 'react'
+import { Provider } from 'react-redux'
+import { SafeAreaView, StyleSheet, StatusBar } from 'react-native'
+import * as RNLocalize from 'react-native-localize'
+//
 import Config from '@Config'
 import configStore from '@Store'
 import styles from '@Styles'
 import Modals from '@Modals'
-import { Provider } from 'react-redux'
 import { setI18nConfig } from '@Localize'
-import * as RNLocalize from 'react-native-localize'
+//
 
-import { SafeAreaView, StyleSheet, StatusBar } from 'react-native'
 
 import AppContainer from './Navigator'
 

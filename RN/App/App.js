@@ -19,7 +19,7 @@ export default class AuctionSystem extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>容器</Text>
+        <Text>容器123</Text>
       </View>
     )
   }

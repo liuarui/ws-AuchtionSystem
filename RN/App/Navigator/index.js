@@ -1,58 +1,68 @@
-import React from "react";
-import config from "@Config";
-import t from "@Localize";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import React from 'react'
+import config from '@Config'
+import t from '@Localize'
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 
-import Icon from "@Components/Icon";
-import HomeScreen from "@Views/Home";
-import ContactsScreen from "@Views/Contacts";
-import SettingsScreen from "@Views/Settings";
-import AboutScreen from "@Views/About";
-import ProfileScreen from "@Views/Profile";
-import LanguageScreen from "@Views/Language";
-import FeedbackScreen from "@Views/Feedback";
-import MessageScreen from "@Views/Message";
-import PostScreen from "@Views/Post";
+import Icon from '@Components/Icon'
+import HomeScreen from '@Views/Home'
+import ContactsScreen from '@Views/Contacts'
+import SettingsScreen from '@Views/Settings'
+import AboutScreen from '@Views/About'
+import ProfileScreen from '@Views/Profile'
+import LanguageScreen from '@Views/Language'
+import FeedbackScreen from '@Views/Feedback'
+import MessageScreen from '@Views/Message'
+import PostScreen from '@Views/Post'
 
-import { View, Text, Platform } from "react-native";
+import { View, Text, Platform } from 'react-native'
 
 const HomeStack = createStackNavigator({
-<<<<<<< HEAD:RN/App/Navigator/index.js
-    Home: { screen: HomeScreen, }
+    Home: { screen: HomeScreen },
   }),
   ContactsStack = createStackNavigator({
-    Contacts: { screen: ContactsScreen }
+    Contacts: { screen: ContactsScreen },
   }),
   SettingsStack = createStackNavigator({
     Settings: { screen: SettingsScreen },
   }),
-
   TabNavigator = createBottomTabNavigator(
     {
       Home: { screen: HomeStack },
       Contacts: { screen: ContactsStack },
-      Settings: { screen: SettingsStack }
+      Settings: { screen: SettingsStack },
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
         tabBarLabel: ({ focused, tintColor }) => {
           const { routeName } = navigation.state,
             viewStyle = {
-              alignItems: 'center'
+              alignItems: 'center',
             }
 
           if (Platform.OS === 'android') {
             viewStyle.marginBottom = 4
           }
           switch (routeName) {
-          case 'Home':
-            return <View style={viewStyle}><Text style={{ color: tintColor, fontSize: 12 }}>{t('global.home')}</Text></View>
-          case 'Contacts':
-            return <View style={viewStyle}><Text style={{ color: tintColor, fontSize: 12 }}>{t('global.contacts')}</Text></View>
-          case 'Settings':
-            return <View style={viewStyle}><Text style={{ color: tintColor, fontSize: 12 }}>{t('global.settings')}</Text></View>
+            case 'Home':
+              return (
+                <View style={viewStyle}>
+                  <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.home')}</Text>
+                </View>
+              )
+            case 'Contacts':
+              return (
+                <View style={viewStyle}>
+                  <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.contacts')}</Text>
+                </View>
+              )
+            case 'Settings':
+              return (
+                <View style={viewStyle}>
+                  <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.settings')}</Text>
+                </View>
+              )
           }
         },
         tabBarIcon: ({ focused, tintColor }) => {
@@ -61,15 +71,15 @@ const HomeStack = createStackNavigator({
           let iconName
 
           switch (routeName) {
-          case 'Home':
-            iconName = `ios7home${focused ? '' : 'outline'}`
-            break
-          case 'Contacts':
-            iconName = `ios7chatbubble${focused ? '' : 'outline'}`
-            break
-          case 'Settings':
-            iconName = `ios7gear${focused ? '' : 'outline'}`
-            break
+            case 'Home':
+              iconName = `ios7home${focused ? '' : 'outline'}`
+              break
+            case 'Contacts':
+              iconName = `ios7chatbubble${focused ? '' : 'outline'}`
+              break
+            case 'Settings':
+              iconName = `ios7gear${focused ? '' : 'outline'}`
+              break
           }
           return <Icon name={iconName} size={26} color={tintColor} />
         },
@@ -77,110 +87,22 @@ const HomeStack = createStackNavigator({
       tabBarOptions: {
         activeTintColor: config.mainColor,
         inactiveTintColor: 'gray',
-      }
-    }
-  ),
-
-  AppStack = createStackNavigator({
-=======
-  Home: { screen: HomeScreen }
-});
-const ContactsStack = createStackNavigator({
-  Contacts: { screen: ContactsScreen },
-});
-const SettingsStack = createStackNavigator({
-  Settings: { screen: SettingsScreen }
-});
-
-const TabNavigator = createBottomTabNavigator(
-  {
-    Home: { screen: HomeStack },
-    Contacts: { screen: ContactsStack },
-    Settings: { screen: SettingsStack },
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarLabel: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state;
-        const viewStyle = {
-          alignItems: "center",
-        };
-
-        if (Platform.OS === "android") {
-          viewStyle.marginBottom = 4;
-        }
-        switch (routeName) {
-        case "Home":
-          return (
-              <View style={viewStyle}>
-                <Text style={{ color: tintColor, fontSize: 12 }}>
-                  {t("global.home")}
-                </Text>
-              </View>
-        case 'Contacts':
-          return (
-              <View style={viewStyle}>
-                <Text style={{ color: tintColor, fontSize: 12 }}>
-                  {t("global.contacts")}
-                </Text>
-              </View>
-        case 'Settings':
-          return (
-              <View style={viewStyle}>
-                <Text style={{ color: tintColor, fontSize: 12 }}>
-                  {t("global.settings")}
-                </Text>
-              </View>
-            );
-        }
       },
-      tabBarIcon: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state;
-
-        let iconName;
-
-        switch (routeName) {
-        case "Home":
-          iconName = `ios7home${focused ? "" : "outline"}`;
-          break;
-        case "Contacts":
-          iconName = `ios7chatbubble${focused ? "" : "outline"}`;
-          break;
-        case "Settings":
-          iconName = `ios7gear${focused ? "" : "outline"}`;
-          break;
-        }
-        return <Icon name={iconName} size={26} color={tintColor} />;
-      }
-    }),
-    tabBarOptions: {
-      activeTintColor: config.mainColor,
-      inactiveTintColor: "gray",
     },
-  },
-);
+  ),
+  AppStack = createStackNavigator(
+    {
+      Tabs: TabNavigator,
+      About: { screen: AboutScreen },
+      Profile: { screen: ProfileScreen },
+      Language: { screen: LanguageScreen },
+      Feedback: { screen: FeedbackScreen },
+      Message: { screen: MessageScreen },
+      Post: { screen: PostScreen },
+    },
+    {
+      headerMode: 'none',
+    },
+  )
 
-const AppStack = createStackNavigator(
-  {
->>>>>>> 465fd0d2e97a74c7c7e7d5c125a4109d94d6871e:App/Navigator/index.js
-    Tabs: TabNavigator,
-    About: { screen: AboutScreen },
-    Profile: { screen: ProfileScreen },
-    Language: { screen: LanguageScreen },
-    Feedback: { screen: FeedbackScreen },
-    Message: { screen: MessageScreen },
-<<<<<<< HEAD:RN/App/Navigator/index.js
-    Post: { screen: PostScreen }
-  }, {
-    headerMode: 'none',
-  })
-=======
-    Post: { screen: PostScreen },
-  },
-  {
-    headerMode: "none",
-  },
-);
->>>>>>> 465fd0d2e97a74c7c7e7d5c125a4109d94d6871e:App/Navigator/index.js
-
-export default createAppContainer(AppStack);
+export default createAppContainer(AppStack)
