@@ -1,108 +1,63 @@
+// In App.js in a new project
+
 import React from 'react'
-import config from '@Config'
-import t from '@Localize'
-import { createAppContainer } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack'
-import { createBottomTabNavigator } from 'react-navigation-tabs'
-
-import Icon from '@Components/Icon'
+import { View, Text } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+/* 引入路由组件开始 */
+// 主页部分
 import HomeScreen from '@Views/Home'
-import ContactsScreen from '@Views/Contacts'
-import SettingsScreen from '@Views/Settings'
-import AboutScreen from '@Views/About'
-import ProfileScreen from '@Views/Profile'
-import LanguageScreen from '@Views/Language'
-import FeedbackScreen from '@Views/Feedback'
-import MessageScreen from '@Views/Message'
-import PostScreen from '@Views/Post'
+import SearchScreen from '@Views/Home/Search'
+// 拍品瀑布流部分
+import AuctionListScreen from '@Views/AuctionList'
+// 个人中心部分
+import UserScreen from '@Views/User'
+import MyFavorite from '@Views/User/MyFavorite'
+import MyAuction from '@Views/User/MyAuction'
+import Setting from '@Views/User/Setting'
+/* 引入路由组件结束 */
+const Tab = createBottomTabNavigator()
 
-import { View, Text, Platform } from 'react-native'
+const HomeStack = createStackNavigator()
+const AuctionListStack = createStackNavigator()
+const UserStack = createStackNavigator()
 
-const HomeStack = createStackNavigator({
-    Home: { screen: HomeScreen },
-  }),
-  ContactsStack = createStackNavigator({
-    Contacts: { screen: ContactsScreen },
-  }),
-  SettingsStack = createStackNavigator({
-    Settings: { screen: SettingsScreen },
-  }),
-  TabNavigator = createBottomTabNavigator(
-    {
-      Home: { screen: HomeStack },
-      Contacts: { screen: ContactsStack },
-      Settings: { screen: SettingsStack },
-    },
-    {
-      defaultNavigationOptions: ({ navigation }) => ({
-        tabBarLabel: ({ focused, tintColor }) => {
-          const { routeName } = navigation.state,
-            viewStyle = {
-              alignItems: 'center',
-            }
+// const SearchScreen =
 
-          if (Platform.OS === 'android') {
-            viewStyle.marginBottom = 4
-          }
-          switch (routeName) {
-            case 'Home':
-              return (
-                <View style={viewStyle}>
-                  <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.home')}</Text>
-                </View>
-              )
-            case 'Contacts':
-              return (
-                <View style={viewStyle}>
-                  <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.contacts')}</Text>
-                </View>
-              )
-            case 'Settings':
-              return (
-                <View style={viewStyle}>
-                  <Text style={{ color: tintColor, fontSize: 12 }}>{t('global.settings')}</Text>
-                </View>
-              )
-          }
-        },
-        tabBarIcon: ({ focused, tintColor }) => {
-          const { routeName } = navigation.state
-
-          let iconName
-
-          switch (routeName) {
-            case 'Home':
-              iconName = `ios7home${focused ? '' : 'outline'}`
-              break
-            case 'Contacts':
-              iconName = `ios7chatbubble${focused ? '' : 'outline'}`
-              break
-            case 'Settings':
-              iconName = `ios7gear${focused ? '' : 'outline'}`
-              break
-          }
-          return <Icon name={iconName} size={26} color={tintColor} />
-        },
-      }),
-      tabBarOptions: {
-        activeTintColor: config.mainColor,
-        inactiveTintColor: 'gray',
-      },
-    },
-  ),
-  AppStack = createStackNavigator(
-    {
-      Tabs: TabNavigator,
-      About: { screen: AboutScreen },
-      Profile: { screen: ProfileScreen },
-      Language: { screen: LanguageScreen },
-      Feedback: { screen: FeedbackScreen },
-      Message: { screen: MessageScreen },
-      Post: { screen: PostScreen },
-    },
-    {
-      headerMode: 'none',
-    },
+function AppContainer() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="主页">
+          {() => (
+            <HomeStack.Navigator>
+              <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: '主页' }} />
+              <HomeStack.Screen name="Search" component={SearchScreen} options={{ title: '搜索页' }} />
+            </HomeStack.Navigator>
+          )}
+        </Tab.Screen>
+        <Tab.Screen name="精选拍品">
+          {() => (
+            <UserStack.Navigator>
+              <UserStack.Screen name="AuctionList" component={AuctionListScreen} options={{ title: '精选拍品' }} />
+              {/* <UserStack.Screen name="Details" component={HomeScreen} /> */}
+            </UserStack.Navigator>
+          )}
+        </Tab.Screen>
+        <Tab.Screen name="我的">
+          {() => (
+            <UserStack.Navigator>
+              <UserStack.Screen name="User" component={UserScreen} options={{ title: '个人中心' }} />
+              <UserStack.Screen name="MyFavorite" component={MyFavorite} options={{ title: '收藏' }} />
+              <UserStack.Screen name="MyAuction" component={MyAuction} options={{ title: '我的拍卖品' }} />
+              <UserStack.Screen name="Setting" component={Setting} options={{ title: '设置' }} />
+            </UserStack.Navigator>
+          )}
+        </Tab.Screen>
+      </Tab.Navigator>
+    </NavigationContainer>
   )
+}
 
-export default createAppContainer(AppStack)
+export default AppContainer
