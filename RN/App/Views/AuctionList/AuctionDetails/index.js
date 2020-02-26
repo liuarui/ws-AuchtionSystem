@@ -14,7 +14,7 @@ import { setModalVisibleStatus } from '@Store/Actions'
 //     setModalVisibleStatus,
 //   },
 // )
-export default class AuctionListScreen extends React.Component {
+export default class AuctionDetailsScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -25,7 +25,7 @@ export default class AuctionListScreen extends React.Component {
   render() {
     return (
       <View style={viewStyles.container}>
-        <Text>拍品瀑布流</Text>
+        <Text>拍卖品详情</Text>
       </View>
     )
   }
