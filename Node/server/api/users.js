@@ -3,25 +3,72 @@
 */
 
 const express = require('express')
-// const bodyParser = require('body-parser')
 const router = express.Router()
-const db = require('../../config/db')
+const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt')
 
-// const jsonParser = bodyParser.json() // 解析json格式
+const db = require('../../utils/Database')
+const Result = require('../../utils/Result')
+const Token = require('../../utils/Token')
+const saltRounds = 10
 // 注册
-router.post('/register', (req, res, next) => {
+router.post('/register', bodyParser.json(), async (req, res, next) => {
+  let uname = req.body.username
+  let pwd = req.body.password
+  ///// todo 数据校验拦截 //////
+
   // 1.先检查数据库是否含有该用户名
+  let selectResult = await db.select('username', 'user', { username: uname })
+  let register = selectResult.length === 0 ? false : true
   // 2.如果有则返回用户名已注册，注册失败
-  // 3.如果没有则将数据插入数据库
-  // 4.返回注册成功信息
-  res.send('注册')
+  if (register === true) {
+    return res.json(
+      Result.jsonResult(
+        {
+          register: true,
+        },
+        '用户已注册',
+      ),
+    )
+  } else {
+    // 3.如果没有则将数据插入数据库
+    // 加密
+    bcrypt.hash(pwd, saltRounds, async (err, hash) => {
+      let insertResult = await db.insert({ username: uname, password: hash }, 'user')
+      // 4.返回注册成功信息
+      return res.json(Result.resultHandle(insertResult))
+    })
+  }
 })
 // 登陆
-router.post('/login', (req, res, next) => {
+router.post('/login', bodyParser.json(), async (req, res, next) => {
+  let uname = req.body.username
+  let pwd = req.body.password
+  // 1.先检查数据库是否含有该用户名
+  let selectRegister = await db.select('username', 'user', { username: uname })
+  let register = selectRegister.length === 0 ? false : true
+  // 2.如果无则返回用户名为未注册，登陆失败
+  if (register === false) {
+    return res.json(
+      {
+        register: false,
+      },
+      '当前用户名未注册',
+    )
+  }
+  let selectResult = await db.select('password', 'user', { username: uname })
   // 1. 接收参数，在数据库查询是否符合
-  // 2. 如果符合则返回登陆成功+token
-  // 3. 不成功返回登陆失败
-  res.send('登陆')
+  bcrypt.compare(pwd, selectResult[0].password, (err, result) => {
+    if (result === true) {
+      // 2. 如果符合则返回登陆成功+token
+      Token.setToken(uname).then(data => {
+        return res.json(Result.jsonResult({ token: data }, '登陆成功'))
+      })
+    } else {
+      // 3. 不成功返回登陆失败
+      return res.json('登陆失败')
+    }
+  })
 })
 // 登出
 router.all('/logout', (req, res, next) => {

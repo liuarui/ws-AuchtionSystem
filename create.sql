@@ -15,7 +15,7 @@ create table user
     userId      bigint unsigned  NOT NULL AUTO_INCREMENT,
     username    varchar(200)     NOT NULL unique,
     password    varchar(200)     NOT NULL,
-    name        varchar(200)     NOT NULL unique,
+    name        varchar(200)     NOT NULL default '小白菜',
     sex         integer unsigned default '2' NOT NULL COMMENT '0为女 1为男 2为保密',
     avatarPath  varchar(200)     default '测试头像地址' NOT NULL,
     roleId      integer unsigned default '0' NOT NULL COMMENT '0为普通用户 1为管理员',
@@ -50,7 +50,7 @@ create table userStar
 
 # dev data
 insert into user (username, name, password, roleId)
-values ('admin','管理员', 'admin', 1);
+values ('admin','管理员', '$2b$10$5T.oR1L1.Adwhgv4qzhpCOidSHtQzfDlwtpJCxCkGj10dIoM2xix2', 1);
 
 insert into auction (name, price, provider, state, ownerId)
 values ('测试拍品:上架中', 100, '管理员', 0, 1),

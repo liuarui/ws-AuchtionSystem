@@ -4,7 +4,7 @@
 
 const express = require('express')
 const router = express.Router()
-const db = require('../../config/db')
+const db = require('../../utils/Database')
 
 router.get('/1', function(req, res, next) {
   let result = db.insert({ id: '25', username: '21223', password: '2', roleId: '1' }, 'user')

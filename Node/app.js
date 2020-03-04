@@ -6,7 +6,8 @@ const path = require('path')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-const session = require('express-session')
+// const session = require('express-session')
+const expressJwt = require('express-jwt')
 
 // 引入api路由模块
 const indexRoute = require('./server/api/index')
@@ -15,8 +16,9 @@ const auctionRoute = require('./server/api/auction')
 const adminRoute = require('./server/api/admin/admin') // 后台管理总路由
 
 // 引入数据库配置
-const db = require('./config/db')
+const db = require('./utils/Database')
 
+const Token = require('./utils/Token') // token解析函数
 const app = express()
 
 // view engine setup 设置所有路由请求的视图路径
@@ -29,6 +31,42 @@ app.set('view engine', 'html')
 app.use(logger('dev')) // 控制台日志
 app.use('/static', express.static(path.join(__dirname, 'public'))) // 挂载静态资源路径
 
+app.use(bodyParser.urlencoded({ extended: true }))
+// 解析token获取用户信息
+app.use((req, res, next) => {
+  let token = req.headers['autur']
+  if (token == undefined) {
+    return next()
+  } else {
+    Token.verToken(token)
+      .then(data => {
+        req.data = data
+        return next()
+      })
+      .catch(error => {
+        return next()
+      })
+  }
+})
+
+//验证token是否过期并规定哪些路由不用验证
+app.use(
+  expressJwt({
+    secret: 'mes_lwr_Token_authorization',
+  }).unless({
+    path: ['/api/users/login', '/api/users/register'], //除了这个地址，其他的URL都需要验证
+  }),
+)
+
+//当token失效返回提示信息
+app.use((err, req, res, next) => {
+  if (err.status == 401) {
+    return res.status(401).json({
+      success: false,
+      msg: 'Token验证失效，请重新登陆',
+    })
+  }
+})
 // 设置路由访问路径
 app.use('/api/index', indexRoute)
 app.use('/api/users', usersRoute)
