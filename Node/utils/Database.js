@@ -79,7 +79,7 @@ class Database {
       return result
     }).catch(err => {})
   }
-  // 单条修改
+  // 修改
   update(updateProp = 'null', table = 'null', tag = 'null') {
     return new Promise(resolve => {
       if (updateProp === 'null') {
@@ -88,10 +88,11 @@ class Database {
       }
       // 解析 目标参数
       let parmsString = ''
-      Object.keys(tag).forEach(key => {
-        parmsString = parmsString + `${key} = ${tag[key]}`
+      Object.keys(updateProp).forEach(key => {
+        parmsString = parmsString + `${key} = "${updateProp[key]}",`
       })
-      let result = query(`UPDATE ${table} SET ? WHERE ${parmsString}`, updateProp)
+      parmsString = parmsString.substr(0, parmsString.length - 1)
+      let result = query(`UPDATE ${table} SET ${parmsString} WHERE ? `, tag)
       resolve(result)
     }).catch(err => {})
   }

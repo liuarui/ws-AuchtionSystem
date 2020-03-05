@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken')
-const signkey = 'mes_lwr_Token_authorization'
+
+const signkey = require('../config/SecretConfig').secretJwtString()
 
 class Token {
   constructor() {
     this.blackList = []
     this.isBlackToken = this.isBlackToken.bind(this)
+    this.revokedToken = this.revokedToken.bind(this)
   }
   // 设置token
   setToken(username, userid) {
@@ -13,7 +15,7 @@ class Token {
         'Bearer ' +
         jwt.sign(
           {
-            name: username,
+            username: username,
           },
           signkey,
           { expiresIn: '24h' },
@@ -31,20 +33,22 @@ class Token {
   // 销毁token 用于注销
   revokedToken(token) {
     return new Promise((resolve, reject) => {
+      // 这里为了操作简便，将黑名单维护在内存中，而不是数据库中，可在数据库中进行维护
       this.blackList.push(token)
       if(this.blackList.length === 999){
+        // 怕过多内存溢出，清理
         this.blackList = []
       }
-      resolve(this.blackList[this.blackList.length - 1])
+      resolve(token)
     })
   }
   // 验证是否存在Token黑名单
   isBlackToken(req, payload, done) {
-    // return done(err)
     let token = req.headers['authorization']
+    // 在内存中获取
     let hasBlack = this.blackList.includes(token)
     if (hasBlack) {
-      return done('当前token已失效', true)
+      return done(401, true)
     } else {
       return done()
     }

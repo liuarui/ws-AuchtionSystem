@@ -82,16 +82,33 @@ router.post('/logout', (req, res, next) => {
   })
 })
 // 获取用户信息
-router.post('/getUserMes', (req, res, next) => {
-  // 1. 根据用户id去数据库查询用户信息
-  res.send('获取用户信息')
+router.get('/getUserMes', async (req, res, next) => {
+  // 1. 根据用户名去数据库查询用户信息
+  let uname = req.data.username
+  let selectResult = await db.select('userId,username,name,sex,avatarPath', 'user', { username: uname })
+  res.json(Result.resultHandle(selectResult))
 })
 // 修改用户信息
-router.post('/updateUserMes', (req, res, next) => {
+router.post('/updateUserMes', bodyParser.json(), async (req, res, next) => {
   // 1.接收参数
+  let uname = req.data.username
+  let name = req.body.name
+  let sex = req.body.sex
+  let aPath = req.body.avatarPath
+  let updateResult = await db.update({ name: name, sex: sex, avatarPath: aPath }, 'user', { username: uname })
+  res.json(Result.resultHandle(updateResult))
   // 2.执行update操作
   // 3.返回成功或失败
-  res.send('修改用户信息')
+})
+
+// 修改用户密码
+router.post('/updateUserPassword', bodyParser.json(), async (req, res, next) => {
+  // 1. 接收参数
+  let uname = req.body.username
+  let pwd = req.body.password
+  // 2.验证旧密码是否正确，不正确返回修改失败
+  // 3.修改新密码，更新数据库
+  // 4.返回修改结果
 })
 // 获取用户订单消息
 router.post('/getUserOrder', (req, res, next) => {
