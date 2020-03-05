@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt')
 const db = require('../../utils/Database')
 const Result = require('../../utils/Result')
 const Token = require('../../utils/Token')
-const saltRounds = 10
+const saltRounds = 10 // 加密盐池
 // 注册
 router.post('/register', bodyParser.json(), async (req, res, next) => {
   let uname = req.body.username
@@ -50,10 +50,12 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
   // 2.如果无则返回用户名为未注册，登陆失败
   if (register === false) {
     return res.json(
-      {
-        register: false,
-      },
-      '当前用户名未注册',
+      Result.jsonResult(
+        {
+          register: false,
+        },
+        '当前用户名未注册',
+      ),
     )
   }
   let selectResult = await db.select('password', 'user', { username: uname })
@@ -71,10 +73,13 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
   })
 })
 // 登出
-router.all('/logout', (req, res, next) => {
-  // 1. 清除session
-  // 2. 返回注销成功
-  res.send('登出')
+router.post('/logout', (req, res, next) => {
+  // 1.将token加入黑名单，校验token 前先确定是否在黑名单中存在，存在则token失效
+  let token = req.headers['authorization']
+  Token.revokedToken(token).then(data => {
+    // 2. 返回注销成功
+    res.json(Result.jsonResult({ revokedToken: data }, '注销成功'))
+  })
 })
 // 获取用户信息
 router.post('/getUserMes', (req, res, next) => {

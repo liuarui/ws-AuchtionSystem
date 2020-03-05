@@ -34,7 +34,7 @@ app.use('/static', express.static(path.join(__dirname, 'public'))) // 挂载静�
 app.use(bodyParser.urlencoded({ extended: true }))
 // 解析token获取用户信息
 app.use((req, res, next) => {
-  let token = req.headers['autur']
+  let token = req.headers['authorization']
   if (token == undefined) {
     return next()
   } else {
@@ -53,6 +53,7 @@ app.use((req, res, next) => {
 app.use(
   expressJwt({
     secret: 'mes_lwr_Token_authorization',
+    isRevoked: Token.isBlackToken,
   }).unless({
     path: ['/api/users/login', '/api/users/register'], //除了这个地址，其他的URL都需要验证
   }),
@@ -60,7 +61,7 @@ app.use(
 
 //当token失效返回提示信息
 app.use((err, req, res, next) => {
-  if (err.status == 401) {
+  if (err) {
     return res.status(401).json({
       success: false,
       msg: 'Token验证失效，请重新登陆',
