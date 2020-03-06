@@ -26,7 +26,7 @@ class Result {
       // 参数有误
       return this.jsonResult({}, '参数有误！', false, [], 1)
     } else if (oldResult === 3) {
-      // 数据冲突！ƒ
+      // 数据冲突！
       return this.jsonResult({}, '数据冲突！', true, [], 3)
     } else {
       // 请求成功！

@@ -58,12 +58,12 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
       ),
     )
   }
-  let selectResult = await db.select('password', 'user', { username: uname })
+  let selectResult = await db.select('userId, password', 'user', { username: uname })
   // 1. 接收参数，在数据库查询是否符合
   bcrypt.compare(pwd, selectResult[0].password, (err, result) => {
     if (result === true) {
       // 2. 如果符合则返回登陆成功+token
-      Token.setToken(uname).then(data => {
+      Token.setToken(uname, selectResult[0].userId).then(data => {
         return res.json(Result.jsonResult({ token: data }, '登陆成功'))
       })
     } else {
@@ -91,26 +91,57 @@ router.get('/getUserMes', async (req, res, next) => {
 // 修改用户信息
 router.post('/updateUserMes', bodyParser.json(), async (req, res, next) => {
   // 1.接收参数
+  if (req.data === false) {
+    return res.json(Result.jsonResult({}, '用户未登录或请求头参数未携带Token'))
+  }
   let uname = req.data.username
   let name = req.body.name
   let sex = req.body.sex
   let aPath = req.body.avatarPath
-  let updateResult = await db.update({ name: name, sex: sex, avatarPath: aPath }, 'user', { username: uname })
-  res.json(Result.resultHandle(updateResult))
+  let tempObject = {}
+  if (name != undefined) {
+    tempObject.name = name
+  }
+  if (sex != undefined) {
+    tempObject.sex = sex
+  }
+  if (aPath != undefined) {
+    tempObject.avatarPath = aPath
+  }
   // 2.执行update操作
+  let updateResult = await db.update(tempObject, 'user', { username: uname })
   // 3.返回成功或失败
+  res.json(Result.resultHandle(updateResult))
 })
 
 // 修改用户密码
 router.post('/updateUserPassword', bodyParser.json(), async (req, res, next) => {
   // 1. 接收参数
   let uname = req.body.username
-  let pwd = req.body.password
-  // 2.验证旧密码是否正确，不正确返回修改失败
-  // 3.修改新密码，更新数据库
-  // 4.返回修改结果
+  let oldpwd = req.body.oldPassword
+  let newpwd = req.body.newPassword
+  // 2.先检查数据库是否含有该用户名
+  let selectResult = await db.select('password', 'user', { username: uname })
+  let hasUser = selectResult.length === 0 ? false : true
+  if (hasUser === true) {
+    // 3.验证旧密码是否正确，不正确返回修改失败
+    bcrypt.compare(oldpwd, selectResult[0].password, (err, result) => {
+      if (result === true) {
+        // 4.修改新密码，更新数据库
+        bcrypt.hash(newpwd, saltRounds, async (err, hash) => {
+          let updateResult = await db.update({ password: hash }, 'user', { username: uname })
+          // 5.返回修改结果
+          return res.json(Result.resultHandle(updateResult))
+        })
+      } else {
+        return res.json(Result.jsonResult({ change: false }, '修改失败,旧密码不正确'))
+      }
+    })
+  } else {
+    return res.json(Result.jsonResult({ change: false }, '修改失败,用户不存在'))
+  }
 })
-// 获取用户订单消息
+// 获取用户订单消息 todo
 router.post('/getUserOrder', (req, res, next) => {
   // 1. 接收参数（需要type：成功，失败，竞拍中）
   // 2. 查询用户拍卖订单表
@@ -119,16 +150,25 @@ router.post('/getUserOrder', (req, res, next) => {
 })
 ///////////////// 收藏部分 ////////////////
 // 根据拍品id 收藏
-router.post('/star', (req, res, next) => {
+router.post('/star', bodyParser.json(), async (req, res, next) => {
   // 1. 接收参数（拍品id)
+  let uid = req.data.userId
+  let aucId = req.body.aucId
   // 2. 将用户id，拍品id，插入收藏表
+  let insertResult = await db.insert({ userId: uid, aucId: aucId }, 'userStar')
+  if (insertResult === 3) {
+    let deleteResult = await db.delete({ userId: uid, aucId: aucId }, 'userStar')
+    if (deleteResult === -1) {
+      return res.json(Result.jsonResult({ star: false }, '取消收藏成功'))
+    }
+  }
   // 3. 返回收藏状态， ture表示收藏成功，false表示取消收藏
-  res.send('根据拍品id 收藏')
+  res.json(Result.jsonResult({ star: true }, '收藏成功'))
 })
 // 根据type获取用户收藏
 router.post('/userStars', (req, res, next) => {
   // 1. 接收参数（type：竞拍中，待开始，全部）
-  // 2. 查询收藏表，然后根据收藏表内容去查询拍品表，
+  // 2. 查询收藏表，然后根据收藏表 的id去查询拍品表，
   // 3. 在根据type，返回拍品表内容
   res.send('根据type获取用户收藏')
 })

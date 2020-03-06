@@ -39,6 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use((req, res, next) => {
   let token = req.headers['authorization']
   if (token == undefined) {
+    req.data = false
     return next()
   } else {
     Token.verToken(token)
@@ -70,6 +71,7 @@ app.use((err, req, res, next) => {
       msg: 'Token验证失效，请重新登陆',
     })
   }
+  return next()
 })
 // 设置路由访问路径
 app.use('/api/index', indexRoute)

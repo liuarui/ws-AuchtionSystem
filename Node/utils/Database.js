@@ -36,6 +36,7 @@ const query = (command, parm) => {
     })
   }).catch(err => {
     console.log('错误code为:', err)
+    return err
   })
 }
 
@@ -54,19 +55,24 @@ class Database {
       // WHERE 条件查询
       let result = query(`SELECT ${prop} FROM ${table} WHERE ?`, parms)
       resolve(result)
-    }).catch(err => {})
+    }).catch(err => {
+      return err
+    })
   }
 
   // 插入
   insert(prop = {}, table = 'null') {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (table === 'null') {
         // console.log('插入失败！请检查参数，如 db.insert(prop={}, tableName=String)')
         resolve(1)
       }
       let result = query(`INSERT INTO ${table} SET ? `, prop)
       resolve(result)
-    }).catch(err => {})
+    }).catch(err => {
+      console.log(123, err)
+      return err
+    })
   }
   // 删除
   delete(prop = 'null', table = 'null') {
@@ -75,9 +81,16 @@ class Database {
         console.log('删除失败！请添加所查询的表单参数，如 db.delete(prop={}, tableName=String)')
         resolve(1)
       }
-      let result = query(`DELETE FROM ${table} WHERE ?`, prop)
-      return result
-    }).catch(err => {})
+      let parmsString = ''
+      Object.keys(prop).forEach(key => {
+        parmsString = parmsString + `${key} = "${prop[key]}"and `
+      })
+      parmsString = parmsString.substr(0, parmsString.length - 4)
+      let result = query(`DELETE FROM ${table} WHERE ${parmsString}`)
+      resolve(result)
+    }).catch(err => {
+      return err
+    })
   }
   // 修改
   update(updateProp = 'null', table = 'null', tag = 'null') {
@@ -94,7 +107,9 @@ class Database {
       parmsString = parmsString.substr(0, parmsString.length - 1)
       let result = query(`UPDATE ${table} SET ${parmsString} WHERE ? `, tag)
       resolve(result)
-    }).catch(err => {})
+    }).catch(err => {
+      return err
+    })
   }
 }
 module.exports = new Database()

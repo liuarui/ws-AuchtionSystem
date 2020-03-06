@@ -9,13 +9,14 @@ class Token {
     this.revokedToken = this.revokedToken.bind(this)
   }
   // 设置token
-  setToken(username, userid) {
+  setToken(username, userId) {
     return new Promise((resolve, reject) => {
       let token =
         'Bearer ' +
         jwt.sign(
           {
             username: username,
+            userId: userId,
           },
           signkey,
           { expiresIn: '24h' },
@@ -35,7 +36,7 @@ class Token {
     return new Promise((resolve, reject) => {
       // 这里为了操作简便，将黑名单维护在内存中，而不是数据库中，可在数据库中进行维护
       this.blackList.push(token)
-      if(this.blackList.length === 999){
+      if (this.blackList.length === 999) {
         // 怕过多内存溢出，清理
         this.blackList = []
       }
