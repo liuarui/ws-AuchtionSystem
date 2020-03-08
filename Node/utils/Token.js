@@ -49,7 +49,7 @@ class Token {
     // 在内存中获取
     let hasBlack = this.blackList.includes(token)
     if (hasBlack) {
-      return done(401, true)
+      return done({ name: 'UnauthorizedError' }, true)
     } else {
       return done()
     }

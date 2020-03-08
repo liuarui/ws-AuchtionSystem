@@ -1,5 +1,5 @@
 class SecretConfig {
-  // 不需要验证 token的 路由路径配置
+  // token加密字符串
   secretJwtString() {
     return 'mes_lwr_Token_authorization'
   }

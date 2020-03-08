@@ -73,7 +73,7 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
   })
 })
 // 登出
-router.post('/logout', (req, res, next) => {
+router.all('/logout', (req, res, next) => {
   // 1.将token加入黑名单，校验token 前先确定是否在黑名单中存在，存在则token失效
   let token = req.headers['authorization']
   Token.revokedToken(token).then(data => {
@@ -91,9 +91,6 @@ router.get('/getUserMes', async (req, res, next) => {
 // 修改用户信息
 router.post('/updateUserMes', bodyParser.json(), async (req, res, next) => {
   // 1.接收参数
-  if (req.data === false) {
-    return res.json(Result.jsonResult({}, '用户未登录或请求头参数未携带Token'))
-  }
   let uname = req.data.username
   let name = req.body.name
   let sex = req.body.sex
@@ -141,12 +138,21 @@ router.post('/updateUserPassword', bodyParser.json(), async (req, res, next) => 
     return res.json(Result.jsonResult({ change: false }, '修改失败,用户不存在'))
   }
 })
-// 获取用户订单消息 todo
-router.post('/getUserOrder', (req, res, next) => {
-  // 1. 接收参数（需要type：成功，失败，竞拍中）
-  // 2. 查询用户拍卖订单表
-  // 3. 根据type返回相应类型的订单
-  res.send('获取用户订单消息')
+// 获取用户订单消息
+router.get('/getUserOrder', bodyParser.json(), async (req, res, next) => {
+  // 1. 接受参数
+  let uid = req.data.userId
+  // 2. 查询用户拍卖订单表获取aucId
+  let orderArray = await db.select('aucId', 'auctionOrder', { userId: uid })
+  let queryParm = ''
+  orderArray.forEach(value => {
+    queryParm = queryParm + `aucId = ${value.aucId} OR `
+  })
+  queryParm = queryParm.substr(0, queryParm.length - 4)
+  // 3. 查询回来的aucId
+  let selectResult = await db.select('*', 'auctionOrder', true, queryParm)
+  // 3. 返回结果
+  return res.json(Result.resultHandle(selectResult))
 })
 ///////////////// 收藏部分 ////////////////
 // 根据拍品id 收藏

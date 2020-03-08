@@ -42,7 +42,7 @@ const query = (command, parm) => {
 
 class Database {
   // 查询
-  select(prop = '*', table = 'null', parms = 'null') {
+  select(prop = '*', table = 'null', parms = 'null',whereParms) {
     return new Promise(resolve => {
       if (table === 'null') {
         resolve(1)
@@ -52,7 +52,12 @@ class Database {
         let result = query(`SELECT ${prop} FROM ${table}`)
         resolve(result)
       }
-      // WHERE 条件查询
+      // WHERE 多条件查询
+      if (parms === true) {
+        let result = query(`SELECT ${prop} FROM ${table} WHERE ${whereParms}`)
+        resolve(result)
+      }
+      // WHERE 单条件查询
       let result = query(`SELECT ${prop} FROM ${table} WHERE ?`, parms)
       resolve(result)
     }).catch(err => {
@@ -70,7 +75,6 @@ class Database {
       let result = query(`INSERT INTO ${table} SET ? `, prop)
       resolve(result)
     }).catch(err => {
-      console.log(123, err)
       return err
     })
   }

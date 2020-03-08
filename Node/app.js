@@ -39,11 +39,11 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use((req, res, next) => {
   let token = req.headers['authorization']
   if (token == undefined) {
-    req.data = false
     return next()
   } else {
     Token.verToken(token)
       .then(data => {
+        console.log('解析token用户数据为：',data)
         req.data = data
         return next()
       })
@@ -62,10 +62,9 @@ app.use(
     path: BaseConfig.noTokenRouter(), //除了用户登陆和其他的URL都需要验证
   }),
 )
-
 //当token失效返回提示信息
 app.use((err, req, res, next) => {
-  if (err === 401) {
+  if (err.name === 'UnauthorizedError') {
     return res.status(401).json({
       success: false,
       msg: 'Token验证失效，请重新登陆',
