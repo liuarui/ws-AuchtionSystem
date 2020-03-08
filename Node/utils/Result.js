@@ -3,7 +3,7 @@
 // 只有查询失败的时候才会返回 success = false
 /*
   SUCCESS(-1, "请求成功！"),
-  RESULT_EMPTY(0, "请求结果为空！"),
+  RESULT_EMPTY(0, "结果为空！"),
   PARAM_ERROR(1, "参数有误！"),
   RUNTIME_ERROR(2, "服务器异常！"),
   DATA_CONFLICT(3, "数据冲突！")
@@ -19,9 +19,9 @@ class Result {
     }
   }
   resultHandle(oldResult) {
-    if (oldResult === 0) {
+    if (oldResult.length === 0 || oldResult === 0) {
       // 结果为空
-      return this.jsonResult({}, '请求结果为空！', true, [], 0)
+      return this.jsonResult({}, '结果为空！', true, [], 0)
     } else if (oldResult === 1) {
       // 参数有误
       return this.jsonResult({}, '参数有误！', false, [], 1)

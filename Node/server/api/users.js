@@ -139,11 +139,14 @@ router.post('/updateUserPassword', bodyParser.json(), async (req, res, next) => 
   }
 })
 // 获取用户订单消息
-router.get('/getUserOrder', bodyParser.json(), async (req, res, next) => {
+router.get('/getUserOrder', async (req, res, next) => {
   // 1. 接受参数
   let uid = req.data.userId
   // 2. 查询用户拍卖订单表获取aucId
   let orderArray = await db.select('aucId', 'auctionOrder', { userId: uid })
+  if (orderArray.length === 0) {
+    return res.json(Result.resultHandle(orderArray))
+  }
   let queryParm = ''
   orderArray.forEach(value => {
     queryParm = queryParm + `aucId = ${value.aucId} OR `
@@ -164,19 +167,32 @@ router.post('/star', bodyParser.json(), async (req, res, next) => {
   let insertResult = await db.insert({ userId: uid, aucId: aucId }, 'userStar')
   if (insertResult === 3) {
     let deleteResult = await db.delete({ userId: uid, aucId: aucId }, 'userStar')
-    if (deleteResult === -1) {
+    if (deleteResult === 0) {
       return res.json(Result.jsonResult({ star: false }, '取消收藏成功'))
     }
   }
   // 3. 返回收藏状态， ture表示收藏成功，false表示取消收藏
   res.json(Result.jsonResult({ star: true }, '收藏成功'))
 })
-// 根据type获取用户收藏
-router.post('/userStars', (req, res, next) => {
-  // 1. 接收参数（type：竞拍中，待开始，全部）
+// 根据获取用户收藏
+router.get('/userStars', async (req, res, next) => {
+  // 1. 接受参数
+  let uid = req.data.userId
   // 2. 查询收藏表，然后根据收藏表 的id去查询拍品表，
-  // 3. 在根据type，返回拍品表内容
-  res.send('根据type获取用户收藏')
+  let starsArray = await db.select('aucId', 'userStar', { userId: uid })
+  //  无收藏则返回空
+  if (starsArray.length === 0) {
+    return res.json(Result.resultHandle(starsArray))
+  }
+  let queryParm = ''
+  starsArray.forEach(value => {
+    queryParm = queryParm + `aucId = ${value.aucId} OR `
+  })
+  queryParm = queryParm.substr(0, queryParm.length - 4)
+  // 3. 查询回来的aucId
+  let selectResult = await db.select('aucId,name,price,provider,state,startTime,endTime', 'auction', true, queryParm)
+  // 3.返回拍品表内容
+  return res.json(Result.resultHandle(selectResult))
 })
 
 module.exports = router

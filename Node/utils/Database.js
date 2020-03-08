@@ -23,12 +23,24 @@ const query = (command, parm) => {
         } else {
           connection.release() // 释放连接
           let res = JSON.parse(JSON.stringify(results)) // 处理res格式
+          // 更新数据失败逻辑
+          console.log(res)
           if (res.affectedRows > 0) {
-            console.log('query操作成功')
-            return resolve(-1)
-          } else if (res.affectedRows === 0) {
-            console.log('query操作失败')
+            if (res.insertId > 0) {
+              // 插入成功
+              return resolve(-1)
+            }
+            if (res.changedRows > 0) {
+              // 更新数据成功
+              return resolve(-1)
+            }
+            // 数据更新失败 和删除成功
             return reject(0)
+          }
+          // 删除失败逻辑
+          if (res.affectedRows === 0) {
+            console.log('query操作成功')
+            return resolve(0)
           }
           return resolve(res)
         }
@@ -42,7 +54,7 @@ const query = (command, parm) => {
 
 class Database {
   // 查询
-  select(prop = '*', table = 'null', parms = 'null',whereParms) {
+  select(prop = '*', table = 'null', parms = 'null', whereParms) {
     return new Promise(resolve => {
       if (table === 'null') {
         resolve(1)
