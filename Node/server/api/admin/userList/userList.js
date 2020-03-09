@@ -46,7 +46,6 @@ router.post('/updateUserMes', bodyParser.json(), async (req, res, next) => {
     tempObject.password = hash
   })
   // 1. 接收username更新信息
-  tempObject.username = uname
   req.body.name ? (tempObject.name = req.body.name) : null
   req.body.sex ? (tempObject.sex = req.body.sex) : null
   req.body.avatarPath ? (tempObject.avatarPath = req.body.avatarPath) : null

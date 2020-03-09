@@ -31,7 +31,6 @@ router.post('/updateAuctionMes', bodyParser.json(), async (req, res, next) => {
   }
   // 1. 接收拍品信息，去更新相应拍品
   let tempObject = {}
-  tempObject.aucId = aucId
   req.body.name ? (tempObject.name = req.body.name) : null
   req.body.price ? (tempObject.price = req.body.price) : null
   req.body.provider ? (tempObject.provider = req.body.provider) : null

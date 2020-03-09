@@ -8,13 +8,18 @@ const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 
 const auctionList = require('./auctionList/auctionList')
+const auctionOrderList = require('./auctionOrderList/auctionOrderList')
 const userList = require('./userList/userList')
+const userStarList = require('./userStarList/userStarList')
+
 const db = require('../../../utils/Database')
 const Result = require('../../../utils/Result')
 const Token = require('../../../utils/Token')
 const saltRounds = 10 // 加密盐池
 
 router.use('/auction', auctionList)
+router.use('/auctionOrder', auctionOrderList)
+router.use('/userStar', userStarList)
 router.use('/user', userList)
 
 // 后台管理登陆
