@@ -4,25 +4,23 @@
 
 const express = require('express')
 const router = express.Router()
+const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt')
+
 const db = require('../../utils/Database')
+const Result = require('../../utils/Result')
 
-router.get('/1', function(req, res, next) {
-  let result = db.insert({ id: '25', username: '21223', password: '2', roleId: '1' }, 'user')
-  // console.log(db.insert({ id: '25', username: '21223', password: '2', roleId: '1' }, 'user'))
-  console.log(result)
-  res.render('123', { title: 'Express' })
+// 分页 搜索查询拍品表
+router.post('/pageSearchAuction', bodyParser.json(), async (req, res, next) => {
+  // 1. 接收参数keyword ，page,size
+  let keyword = req.body.keyword ? req.body.keyword : ''
+  let page = req.body.page ? req.body.page : 1
+  let size = req.body.size ? req.body.size : 10
+  let first = (page - 1) * size
+  let second = page * size
+  // 2. 查询拍品表
+  let selectResult = await db.select('aucId,name,price,provider,state,startTime,endTime', 'auction', false, `WHERE name LIKE '%${keyword}%' LIMIT ${first},${second}`)
+  // 3. 根据参数返回相应数据
+  res.json(Result.resultHandle(selectResult))
 })
-router.get('/2', function(req, res, next) {
-  console.log(db.select('*','user',{id : 25}))
-  res.render('123', { title: 'Express' })
-})
-router.get('/3', function(req, res, next) {
-  console.log(db.delete({id : 25},'user'))
-  res.render('123', { title: 'Express' })
-})
-router.get('/4', function(req, res, next) {
-  console.log(db.update({username : 888,password:888},'user',{id : 25}))
-  res.render('123', { title: 'Express' })
-})
-
 module.exports = router

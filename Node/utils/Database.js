@@ -24,24 +24,26 @@ const query = (command, parm) => {
           connection.release() // 释放连接
           let res = JSON.parse(JSON.stringify(results)) // 处理res格式
           // 更新数据失败逻辑
-          console.log(res)
           if (res.affectedRows > 0) {
             if (res.insertId > 0) {
-              // 插入成功
+              console.log('插入成功 ')
               return resolve(-1)
             }
             if (res.changedRows > 0) {
-              // 更新数据成功
+              console.log('更新数据成功')
               return resolve(-1)
             }
             // 数据更新失败 和删除成功
-            return reject(0)
+            console.log('数据更新失败')
+            return resolve(0)
           }
           // 删除失败逻辑
           if (res.affectedRows === 0) {
-            console.log('query操作成功')
+            console.log('query删除失败')
             return resolve(0)
           }
+          // 查询情况直接返回
+          console.log('query操作成功')
           return resolve(res)
         }
       })
@@ -54,7 +56,7 @@ const query = (command, parm) => {
 
 class Database {
   // 查询
-  select(prop = '*', table = 'null', parms = 'null', whereParms) {
+  select(prop = '*', table = 'null', parms = 'null', otherParms) {
     return new Promise(resolve => {
       if (table === 'null') {
         resolve(1)
@@ -66,7 +68,12 @@ class Database {
       }
       // WHERE 多条件查询
       if (parms === true) {
-        let result = query(`SELECT ${prop} FROM ${table} WHERE ${whereParms}`)
+        let result = query(`SELECT ${prop} FROM ${table} WHERE ${otherParms}`)
+        resolve(result)
+      }
+      // 特殊查询 条件查询
+      if (parms === false){
+        let result = query(`SELECT ${prop} FROM ${table} ${otherParms}`)
         resolve(result)
       }
       // WHERE 单条件查询
