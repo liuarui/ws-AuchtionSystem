@@ -7,7 +7,7 @@ const sqlPool = require('../config/dbConfig') // 配置文件
   DATA_CONFLICT(3, "数据冲突！")
 */
 // 操作语句函数封装
-const query = (command, parm) => {
+const query = (command, parm, del) => {
   return new Promise((resolve, reject) => {
     sqlPool.getConnection((err, connection) => {
       if (err) {
@@ -33,7 +33,11 @@ const query = (command, parm) => {
               console.log('更新数据成功')
               return resolve(-1)
             }
-            // 数据更新失败 和删除成功
+            if(del === true){
+              console.log('删除成功')
+              return resolve(-1)
+            }
+            // 数据更新失败
             console.log('数据更新失败')
             return resolve(0)
           }
@@ -109,7 +113,7 @@ class Database {
         parmsString = parmsString + `${key} = "${prop[key]}"and `
       })
       parmsString = parmsString.substr(0, parmsString.length - 4)
-      let result = query(`DELETE FROM ${table} WHERE ${parmsString}`)
+      let result = query(`DELETE FROM ${table} WHERE ${parmsString}`,null,true)
       resolve(result)
     }).catch(err => {
       return err

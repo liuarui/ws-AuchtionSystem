@@ -167,7 +167,7 @@ router.post('/star', bodyParser.json(), async (req, res, next) => {
   let insertResult = await db.insert({ userId: uid, aucId: aucId }, 'userStar')
   if (insertResult === 3) {
     let deleteResult = await db.delete({ userId: uid, aucId: aucId }, 'userStar')
-    if (deleteResult === 0) {
+    if (deleteResult === -1) {
       return res.json(Result.jsonResult({ star: false }, '取消收藏成功'))
     }
   }
