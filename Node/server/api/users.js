@@ -49,14 +49,7 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
   let register = selectRegister.length === 0 ? false : true
   // 2.如果无则返回用户名为未注册，登陆失败
   if (register === false) {
-    return res.json(
-      Result.jsonResult(
-        {
-          register: false,
-        },
-        '当前用户名未注册',
-      ),
-    )
+    return res.json(Result.jsonResult({ register: false }, '当前用户名未注册', true, [], 0))
   }
   let selectResult = await db.select('userId, password', 'user', { username: uname })
   // 1. 接收参数，在数据库查询是否符合
@@ -68,7 +61,7 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
       })
     } else {
       // 3. 不成功返回登陆失败
-      return res.json('登陆失败')
+      return res.json(Result.jsonResult({}, '登陆失败', true, [], 0))
     }
   })
 })
@@ -76,10 +69,14 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
 router.all('/logout', (req, res, next) => {
   // 1.将token加入黑名单，校验token 前先确定是否在黑名单中存在，存在则token失效
   let token = req.headers['authorization']
-  Token.revokedToken(token).then(data => {
-    // 2. 返回注销成功
-    res.json(Result.jsonResult({ revokedToken: data }, '注销成功'))
-  })
+  Token.revokedToken(token)
+    .then(data => {
+      // 2. 返回注销成功
+      res.json(Result.jsonResult({ revokedToken: data }, '注销成功', true, [], -1))
+    })
+    .catch(err => {
+      res.json(Result.jsonResult({ err: err }, '注销失败', true, [], 0))
+    })
 })
 // 获取用户信息
 router.get('/getUserMes', async (req, res, next) => {
@@ -131,11 +128,11 @@ router.post('/updateUserPassword', bodyParser.json(), async (req, res, next) => 
           return res.json(Result.resultHandle(updateResult))
         })
       } else {
-        return res.json(Result.jsonResult({ change: false }, '修改失败,旧密码不正确'))
+        return res.json(Result.jsonResult({ change: false }, '修改失败,旧密码不正确'), true, [], 0)
       }
     })
   } else {
-    return res.json(Result.jsonResult({ change: false }, '修改失败,用户不存在'))
+    return res.json(Result.jsonResult({ change: false }, '修改失败,用户不存在'), true, [], 0)
   }
 })
 // 获取用户订单消息
@@ -175,7 +172,7 @@ router.post('/star', bodyParser.json(), async (req, res, next) => {
   res.json(Result.jsonResult({ star: true }, '收藏成功'))
 })
 // 根据获取用户收藏
-router.get('/userStars', async (req, res, next) => {
+router.get('/getUserStars', async (req, res, next) => {
   // 1. 接受参数
   let uid = req.data.userId
   // 2. 查询收藏表，然后根据收藏表 的id去查询拍品表，
