@@ -18,7 +18,7 @@ router.post('/pageSelectUserList', bodyParser.json(), async (req, res, next) => 
   let size = req.body.size ? req.body.size : 10
   let first = (page - 1) * size
   let second = page * size
-  // 2. 查询拍品表
+  // 2. 查询用户表
   let selectResult = await db.select('*', 'user', false, `LIMIT ${first},${second}`)
   // 3. 根据参数返回相应数据
   res.json(Result.resultHandle(selectResult))
@@ -38,13 +38,15 @@ router.post('/updateUserMes', bodyParser.json(), async (req, res, next) => {
   // 1.接收参数
   let uname = req.body.username
   let pwd = req.body.password
-  if (uname === undefined || pwd === undefined) {
-    return res.json(Result.jsonResult({}, '请传递uname和pwd参数'))
+  if (uname === undefined) {
+    return res.json(Result.jsonResult({}, '请传递username'), true, [], 2)
   }
   let tempObject = {}
-  bcrypt.hash(pwd, saltRounds, (err, hash) => {
-    tempObject.password = hash
-  })
+  if (pwd !== undefined) {
+    bcrypt.hash(pwd, saltRounds, (err, hash) => {
+      tempObject.password = hash
+    })
+  }
   // 1. 接收username更新信息
   req.body.name ? (tempObject.name = req.body.name) : null
   req.body.sex ? (tempObject.sex = req.body.sex) : null
