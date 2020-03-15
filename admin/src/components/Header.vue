@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       collapse: false,
-      name: 'linxin',
+      name: 'liuwenrui',
       message: 2,
     }
   },
