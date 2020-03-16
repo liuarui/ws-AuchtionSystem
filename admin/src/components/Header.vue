@@ -47,8 +47,7 @@ export default {
     // 用户名下拉菜单选择事件
     handleCommand(command) {
       if (command === 'loginout') {
-        localStorage.removeItem('token')
-        // this.$store.commit('settoken', '')
+        localStorage.removeItem('ms_username')
         this.$router.push('/login')
       }
     },

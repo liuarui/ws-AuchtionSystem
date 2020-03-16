@@ -109,7 +109,7 @@
 import { fetchUserList /* ,updateUserMes, deleteUser*/ } from '../api/user'
 
 export default {
-  name: 'basetable',
+  name: 'userList',
   data() {
     return {
       query: {
@@ -134,7 +134,6 @@ export default {
     async getData() {
       const result = await fetchUserList(this.query)
 
-      console.log(result)
       this.tableData = result.value
       // this.pageTotal = res.pageTotal || 50
     },

@@ -13,9 +13,14 @@ Vue.use(ElementUI, {
   size: 'small',
 })
 router.beforeEach((to, from, next) => {
+  // 登录路由访问拦截
   let token = localStorage.getItem('token')
 
-  // 如果已经登录，那我不干涉你，让你随便访问
+  console.log(121, to.path)
+  // 除登录路由外
+  if (to.path === '/login' || to.path === '/403') {
+    next()
+  }
   if (token) {
     next()
   }

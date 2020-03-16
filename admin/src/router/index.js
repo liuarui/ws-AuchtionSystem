@@ -44,6 +44,11 @@ export default new Router({
           component: () => import('../views/404.vue'),
           meta: { title: '404' },
         },
+        {
+          path: '/403',
+          component: () => import('../views/403.vue'),
+          meta: { title: '403' },
+        },
       ],
     },
     {

@@ -18,7 +18,7 @@
         <!-- <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
           <el-option key="1" label="广东省" value="广东省"></el-option>
           <el-option key="2" label="湖南省" value="湖南省"></el-option>
-        </el-select> -->
+        </el-select>-->
         <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
@@ -102,15 +102,13 @@
 </template>
 
 <script>
-import api from '../api/userStar'
+import { fetchUserStarList /* ,updateUserMes, deleteUser*/ } from '../api/userStar'
 
 export default {
   name: 'basetable',
   data() {
     return {
       query: {
-        address: '',
-        name: '',
         page: 1,
         size: 10,
       },
@@ -128,13 +126,11 @@ export default {
     this.getData()
   },
   methods: {
-    // 获取 easy-mock 的模拟数据
-    getData() {
-      api.fetchData(this.query).then(res => {
-        // console.log(res)
-        this.tableData = res.list
-        this.pageTotal = res.pageTotal || 50
-      })
+    async getData() {
+      const result = await fetchUserStarList(this.query)
+
+      this.tableData = result.value
+      // this.pageTotal = result.pageTotal || 50
     },
     // 触发搜索按钮
     handleSearch() {
