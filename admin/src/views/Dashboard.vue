@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: '主页',
+  name: 'dashboard',
   data() {
     return {
       username: '刘文锐',

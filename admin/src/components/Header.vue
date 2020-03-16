@@ -34,7 +34,6 @@ export default {
     return {
       collapse: false,
       name: 'liuwenrui',
-      message: 2,
     }
   },
   computed: {
@@ -48,7 +47,8 @@ export default {
     // 用户名下拉菜单选择事件
     handleCommand(command) {
       if (command === 'loginout') {
-        localStorage.removeItem('ms_username')
+        localStorage.removeItem('token')
+        // this.$store.commit('settoken', '')
         this.$router.push('/login')
       }
     },

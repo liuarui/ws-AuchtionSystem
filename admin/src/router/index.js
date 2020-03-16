@@ -40,11 +40,6 @@ export default new Router({
           meta: { title: '用户收藏表管理' },
         },
         {
-          path: '/form',
-          component: () => import('../views/BaseForm.vue'),
-          meta: { title: '基本表单' },
-        },
-        {
           path: '/404',
           component: () => import('../views/404.vue'),
           meta: { title: '404' },

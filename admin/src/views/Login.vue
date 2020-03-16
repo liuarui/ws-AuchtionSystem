@@ -28,12 +28,14 @@
 </template>
 
 <script>
+import { login /*, logout*/ } from '../api/login'
+
 export default {
   data: function() {
     return {
       param: {
         username: 'admin',
-        password: '123123',
+        password: 'admin',
       },
       rules: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -42,12 +44,20 @@ export default {
     }
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       //  发送到服务端验证，然后获取token存储本地 todo
-      this.$refs.login.validate(valid => {
+      this.$refs.login.validate(async valid => {
         if (valid) {
+          const result = await login(this.param)
+
+          localStorage.setItem('token', result.token)
+          this.$store.commit('settoken', result.token)
+          if (this.$route.query.redirect) {
+            this.$router.replace({ path: this.$route.query.redirect })
+          } else {
+            this.$router.replace({ path: '/dashboard' })
+          }
           this.$message.success('登录成功')
-          this.$router.push('/')
         } else {
           this.$message.error('请输入账号和密码')
           console.log('error submit!!')
@@ -63,7 +73,7 @@ export default {
 .login-wrap {
   position: relative;
   width: 100%;
-  height: 800px;
+  height: 1020px;
   background-image: url(../assets/img/login-bg.png);
   background-repeat: no-repeat;
   background-size: 100%;
