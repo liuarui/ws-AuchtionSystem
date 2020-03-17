@@ -3,11 +3,13 @@
 </template>
 
 <script>
+let username = localStorage.getItem('uname')
+
 export default {
   name: 'dashboard',
   data() {
     return {
-      username: '刘文锐',
+      username: username,
     }
   },
 }

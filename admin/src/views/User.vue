@@ -9,18 +9,6 @@
     </div>
     <div class="container">
       <div class="handle-box">
-        <el-button
-          type="primary"
-          icon="el-icon-delete"
-          class="handle-del mr10"
-          @click="delAllSelection"
-        >批量删除</el-button>
-        <!-- <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-          <el-option key="1" label="广东省" value="广东省"></el-option>
-          <el-option key="2" label="湖南省" value="湖南省"></el-option>
-        </el-select>-->
-        <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-        <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
       </div>
       <el-table
@@ -29,11 +17,9 @@
         class="table"
         ref="multipleTable"
         header-cell-class-name="table-header"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column prop="userId" label="userId" width="150" align="center"></el-table-column>
-        <el-table-column prop="username" label="用户名"></el-table-column>
+        <el-table-column prop="username" label="用户名" width="100"></el-table-column>
         <el-table-column prop="password" label="用户密码"></el-table-column>
         <el-table-column prop="name" label="用户昵称"></el-table-column>
         <el-table-column prop="sex" label="性别" width="50"></el-table-column>
@@ -41,24 +27,6 @@
         <el-table-column prop="roleId" label="用户权限"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" label="更新时间"></el-table-column>
-        <!-- <el-table-column label="头像(查看大图)" align="center">
-          <template slot-scope="scope">
-            <el-image
-              class="table-td-thumb"
-              :src="scope.row.thumb"
-              :preview-src-list="[scope.row.thumb]"
-            ></el-image>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" align="center">
-          <template slot-scope="scope">
-            <el-tag
-              :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')"
-            >{{scope.row.state}}</el-tag>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="date" label="注册时间"></el-table-column>-->
         <el-table-column label="操作" width="180" align="center">
           <template slot-scope="scope">
             <el-button
@@ -91,10 +59,22 @@
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
       <el-form ref="form" :model="form" label-width="70px">
         <el-form-item label="用户名">
+          <el-input v-model="form.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="form.password"></el-input>
+        </el-form-item>
+        <el-form-item label="用户昵称">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="form.address"></el-input>
+        <el-form-item label="性别">
+          <el-input v-model="form.sex"></el-input>
+        </el-form-item>
+        <el-form-item label="用户头像路径">
+          <el-input v-model="form.avatarPath"></el-input>
+        </el-form-item>
+        <el-form-item label="用户权限">
+          <el-input v-model="form.roleId"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -106,7 +86,7 @@
 </template>
 
 <script>
-import { fetchUserList /* ,updateUserMes, deleteUser*/ } from '../api/user'
+import { fetchUserList, updateUserMes, deleteUser } from '../api/user'
 
 export default {
   name: 'userList',
@@ -117,58 +97,47 @@ export default {
         size: 10,
       },
       tableData: [],
-      multipleSelection: [],
-      delList: [],
       editVisible: false,
       pageTotal: 0,
       form: {},
       idx: -1,
-      id: -1,
     }
   },
   created() {
     this.getData()
   },
   methods: {
-    // 获取 easy-mock 的模拟数据
+    // 获取数据
     async getData() {
       const result = await fetchUserList(this.query)
 
       this.tableData = result.value
-      // this.pageTotal = res.pageTotal || 50
-    },
-    // 触发搜索按钮
-    handleSearch() {
-      this.$set(this.query, 'pageIndex', 1)
-      this.getData()
+      this.pageTotal = result.pageTotal || 50
     },
     // 删除操作
     handleDelete(index) {
+      let uname = this.tableData[index]['username']
+
       // 二次确认删除
-      this.$confirm('确定要删除吗？', '提示', {
+      this.$confirm(`确定要删除username为${uname}这条数据吗？`, '提示', {
         type: 'warning',
       })
-        .then(() => {
-          this.$message.success('删除成功')
-          this.tableData.splice(index, 1)
+        .then(async () => {
+          const result = await deleteUser({ username: uname })
+
+          if (result.code === -1) {
+            this.$message.success('删除成功')
+            this.tableData.splice(index, 1)
+          } else {
+            this.$message.error('删除失败')
+          }
+          this.getData()
         })
         .catch(() => {})
     },
-    // 多选操作
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    delAllSelection() {
-      const length = this.multipleSelection.length
-
-      let str = ''
-
-      this.delList = this.delList.concat(this.multipleSelection)
-      for (let i = 0; i < length; i++) {
-        str += `${this.multipleSelection[i].name} `
-      }
-      this.$message.error(`删除了${str}`)
-      this.multipleSelection = []
+    // 新增
+    handleAdd() {
+      this.editVisible = true
     },
     // 编辑操作
     handleEdit(index, row) {
@@ -177,14 +146,20 @@ export default {
       this.editVisible = true
     },
     // 保存编辑
-    saveEdit() {
+    async saveEdit() {
+      let result = await updateUserMes(this.form)
+
+      if (result.code === -1) {
+        this.$message.success('保存成功')
+      } else {
+        this.$message.error('修改失败')
+      }
+      this.getData()
       this.editVisible = false
-      this.$message.success(`修改第 ${this.idx + 1} 行成功`)
-      this.$set(this.tableData, this.idx, this.form)
     },
     // 分页导航
     handlePageChange(val) {
-      this.$set(this.query, 'pageIndex', val)
+      this.$set(this.query, 'page', val)
       this.getData()
     },
   },

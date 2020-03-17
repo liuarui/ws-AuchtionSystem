@@ -12,32 +12,34 @@ export default new Router({
     {
       path: '/',
       component: () => import('../components/Home.vue'),
-      meta: { title: '主页' },
+      meta: {
+        requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+      },
       children: [
         {
           path: '/dashboard',
           component: () => import('../views/Dashboard.vue'),
-          meta: { title: '系统首页' },
+          meta: { title: '系统首页', requireAuth: true },
         },
         {
           path: '/auction',
           component: () => import('../views/Auction.vue'),
-          meta: { title: '拍品表管理' },
+          meta: { title: '拍品表管理', requireAuth: true },
         },
         {
           path: '/auctionOrder',
           component: () => import('../views/AuctionOrder.vue'),
-          meta: { title: '拍品订单表管理' },
+          meta: { title: '拍品订单表管理', requireAuth: true },
         },
         {
           path: '/user',
           component: () => import('../views/User.vue'),
-          meta: { title: '用户表管理' },
+          meta: { title: '用户表管理', requireAuth: true },
         },
         {
           path: '/userStar',
           component: () => import('../views/UserStar.vue'),
-          meta: { title: '用户收藏表管理' },
+          meta: { title: '用户收藏表管理', requireAuth: true },
         },
         {
           path: '/404',

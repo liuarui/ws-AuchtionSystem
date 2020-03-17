@@ -33,14 +33,13 @@ export default {
   data() {
     return {
       collapse: false,
-      name: 'liuwenrui',
     }
   },
   computed: {
     username() {
-      let username = localStorage.getItem('ms_username')
+      let username = localStorage.getItem('uname')
 
-      return username || this.name
+      return username
     },
   },
   methods: {

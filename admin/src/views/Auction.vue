@@ -3,24 +3,24 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i> 用户表管理
+          <i class="el-icon-lx-cascades"></i> 拍品表管理
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="container">
       <div class="handle-box">
-        <el-button
+        <!-- <el-button
           type="primary"
           icon="el-icon-delete"
           class="handle-del mr10"
           @click="delAllSelection"
         >批量删除</el-button>
-        <!-- <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
+        <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
           <el-option key="1" label="广东省" value="广东省"></el-option>
           <el-option key="2" label="湖南省" value="湖南省"></el-option>
-        </el-select>-->
+        </el-select>
         <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-        <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>-->
         <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
       </div>
       <el-table
@@ -29,7 +29,6 @@
         class="table"
         ref="multipleTable"
         header-cell-class-name="table-header"
-        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" align="center"></el-table-column>
         <el-table-column prop="aucId" label="拍品id" width="150" align="center"></el-table-column>
@@ -57,9 +56,7 @@
               :type="scope.row.state==='成功'?'success':(scope.row.state==='失败'?'danger':'')"
             >{{scope.row.state}}</el-tag>
           </template>
-        </el-table-column>
-
-        <el-table-column prop="date" label="注册时间"></el-table-column>-->
+        </el-table-column>-->
         <el-table-column label="操作" width="180" align="center">
           <template slot-scope="scope">
             <el-button
@@ -91,11 +88,33 @@
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
       <el-form ref="form" :model="form" label-width="70px">
-        <el-form-item label="用户名">
+        <el-form-item label="拍品id">
+          <el-input v-model="form.aucId"></el-input>
+        </el-form-item>
+        <el-form-item label="拍品名称">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="form.address"></el-input>
+        <el-form-item label="拍品价格">
+          <el-input v-model="form.price"></el-input>
+        </el-form-item>
+        <el-form-item label="供应用户">
+          <el-input v-model="form.provider"></el-input>
+        </el-form-item>
+        <el-form-item label="拍品状态">
+          <el-input v-model="form.state"></el-input>
+        </el-form-item>
+        <el-form-item label="所有权用户id">
+          <el-input v-model="form.ownerId"></el-input>
+        </el-form-item>
+        <el-date-picker
+          v-model="form"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
+        <el-form-item label="结束时间">
+          <el-input v-model="form.endTime"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -107,10 +126,10 @@
 </template>
 
 <script>
-import api from '../api/auction'
+import { fetchAuctionList, updateAuctionMes, deleteAuctionMes } from '../api/auction'
 
 export default {
-  name: 'basetable',
+  name: 'auction',
   data() {
     return {
       query: {
@@ -125,53 +144,67 @@ export default {
       form: {},
       idx: -1,
       id: -1,
+      sTime: {},
+      eTime: {},
     }
   },
   created() {
     this.getData()
   },
   methods: {
-    // 获取 easy-mock 的模拟数据
-    getData() {
-      api.fetchAuctionList(this.query).then(res => {
-        console.log(res)
-        this.tableData = res.list
-        this.pageTotal = res.pageTotal || 50
-      })
-    },
-    // 触发搜索按钮
-    handleSearch() {
-      this.$set(this.query, 'pageIndex', 1)
-      this.getData()
+    // 获取数据
+    async getData() {
+      const result = await fetchAuctionList(this.query)
+
+      this.tableData = result.value
+      this.pageTotal = result.pageTotal || 50
     },
     // 删除操作
     handleDelete(index) {
+      let aucId = this.tableData[index]['aucId']
+
       // 二次确认删除
-      this.$confirm('确定要删除吗？', '提示', {
+      this.$confirm(`确定要删除aucId为${aucId}这条数据吗？`, '提示', {
         type: 'warning',
       })
-        .then(() => {
-          this.$message.success('删除成功')
-          this.tableData.splice(index, 1)
+        .then(async () => {
+          const result = await deleteAuctionMes({ aucId: aucId })
+
+          if (result.code === -1) {
+            this.$message.success('删除成功')
+            this.tableData.splice(index, 1)
+          } else {
+            this.$message.error('删除失败')
+          }
+          this.getData()
         })
         .catch(() => {})
     },
-    // 多选操作
-    handleSelectionChange(val) {
-      this.multipleSelection = val
+    // 新增
+    handleAdd() {
+      this.editVisible = true
     },
-    delAllSelection() {
-      const length = this.multipleSelection.length
+    // // 触发搜索按钮
+    // handleSearch() {
+    //   this.$set(this.query, 'pageIndex', 1)
+    //   this.getData()
+    // },
+    // // 多选操作
+    // handleSelectionChange(val) {
+    //   this.multipleSelection = val
+    // },
+    // delAllSelection() {
+    //   const length = this.multipleSelection.length
 
-      let str = ''
+    //   let str = ''
 
-      this.delList = this.delList.concat(this.multipleSelection)
-      for (let i = 0; i < length; i++) {
-        str += `${this.multipleSelection[i].name} `
-      }
-      this.$message.error(`删除了${str}`)
-      this.multipleSelection = []
-    },
+    //   this.delList = this.delList.concat(this.multipleSelection)
+    //   for (let i = 0; i < length; i++) {
+    //     str += `${this.multipleSelection[i].name} `
+    //   }
+    //   this.$message.error(`删除了${str}`)
+    //   this.multipleSelection = []
+    // },
     // 编辑操作
     handleEdit(index, row) {
       this.idx = index
@@ -179,14 +212,21 @@ export default {
       this.editVisible = true
     },
     // 保存编辑
-    saveEdit() {
+    async saveEdit() {
+      let result = await updateAuctionMes(this.form)
+
+      console.log(result)
+      if (result.code === -1) {
+        this.$message.success('保存成功')
+      } else {
+        this.$message.error('修改失败')
+      }
+      this.getData()
       this.editVisible = false
-      this.$message.success(`修改第 ${this.idx + 1} 行成功`)
-      this.$set(this.tableData, this.idx, this.form)
     },
     // 分页导航
     handlePageChange(val) {
-      this.$set(this.query, 'pageIndex', val)
+      this.$set(this.query, 'page', val)
       this.getData()
     },
   },

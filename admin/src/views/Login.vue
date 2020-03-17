@@ -34,8 +34,8 @@ export default {
   data: function() {
     return {
       param: {
-        username: 'admin',
-        password: 'admin',
+        username: '',
+        password: '',
       },
       rules: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -50,7 +50,17 @@ export default {
         if (valid) {
           const result = await login(this.param)
 
+          if (result.code === 3) {
+            return this.$message.error('账户或密码错误')
+          }
+          if (result.msg === '用户权限不足，请向管理员申请权限') {
+            return this.$message.error('用户权限不足，请向管理员申请权限')
+          }
+          if (result.register === false) {
+            return this.$message.error('当前账户未注册，登录失败')
+          }
           localStorage.setItem('token', result.token)
+          localStorage.setItem('uname', this.$refs.login.model.username)
           this.$store.commit('settoken', result.token)
           if (this.$route.query.redirect) {
             this.$router.replace({ path: this.$route.query.redirect })
