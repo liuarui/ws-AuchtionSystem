@@ -475,7 +475,7 @@ auctionOrder表
 | 字段       | 说明 | 类型   | 是否必填 |
 | ---------- | ---- | ------ | -------- |
 | username   |      | String | 是       |
-| password   |      | String | 否       |
+| password   |      | String | 是       |
 | name       |      | String | 否       |
 | sex        |      | Number | 否       |
 | avatarPath |      | String | 否       |

@@ -46,9 +46,7 @@ router.post('/updateUserMes', bodyParser.json(), async (req, res, next) => {
   }
   let tempObject = {}
   if (pwd !== undefined) {
-    bcrypt.hash(pwd, saltRounds, (err, hash) => {
-      tempObject.password = hash
-    })
+    tempObject.password = bcrypt.hashSync(pwd, saltRounds)
   }
   // 1. 接收username更新信息
   req.body.name ? (tempObject.name = req.body.name) : null
@@ -58,6 +56,7 @@ router.post('/updateUserMes', bodyParser.json(), async (req, res, next) => {
   // 查询是否存在该uname，如果没有则转换成新增操作
   let hasuname = await db.select('username', 'user', { username: uname })
   if (hasuname.length === 0) {
+    tempObject.username = uname
     let insertResult = await db.insert(tempObject, 'user')
     return res.json(Result.resultHandle(insertResult))
   }

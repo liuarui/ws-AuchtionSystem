@@ -14,7 +14,6 @@ const query = (command, parm, del) => {
         console.log('连接数据库失败')
         return reject(2)
       }
-      // console.log('数据库连接成功')
       connection.query(`${command}`, parm, (err, results) => {
         if (err) {
           connection.release() // 释放连接
@@ -92,7 +91,6 @@ class Database {
   insert(prop = {}, table = 'null') {
     return new Promise((resolve, reject) => {
       if (table === 'null') {
-        // console.log('插入失败！请检查参数，如 db.insert(prop={}, tableName=String)')
         resolve(1)
       }
       let result = query(`INSERT INTO ${table} SET ? `, prop)

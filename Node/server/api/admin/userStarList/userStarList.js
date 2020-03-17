@@ -25,27 +25,6 @@ router.post('/pageSelectUserStarList', bodyParser.json(), async (req, res, next)
   res.json(Result.resultHandle(selectResult, total))
 })
 
-// 更新用户收藏信息 (新增和更新操作)
-router.post('/updateUserStarMes', bodyParser.json(), async (req, res, next) => {
-  let id = req.body.id
-  if (id === undefined) {
-    return res.json(Result.jsonResult({}, '请传递id参数'))
-  }
-  // 1. 接收拍品信息，去更新相应拍品
-  let tempObject = {}
-  req.body.aucId ? (tempObject.aucId = req.body.aucId) : null
-  req.body.userId ? (tempObject.userId = req.body.userId) : null
-  // 查询是否存在该id，如果没有则转换成新增操作
-  let hasAucId = await db.select('id', 'userStar', { id: id })
-  if (hasAucId.length === 0) {
-    let insertResult = await db.insert(tempObject, 'userStar')
-    return res.json(Result.resultHandle(insertResult))
-  }
-  // 2.执行update操作
-  let updateResult = await db.update(tempObject, 'userStar', { id: id })
-  // 3.返回成功或失败
-  return res.json(Result.resultHandle(updateResult))
-})
 // 删除用户收藏信息
 router.post('/deleteUserStarMes', bodyParser.json(), async (req, res, next) => {
   let id = req.body.id
