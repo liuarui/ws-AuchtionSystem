@@ -61,7 +61,7 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
       })
     } else {
       // 3. 不成功返回登陆失败
-      return res.json('登陆失败')
+      return res.json(Result.jsonResult({}, '登录失败', true, [], 3))
     }
   })
 })

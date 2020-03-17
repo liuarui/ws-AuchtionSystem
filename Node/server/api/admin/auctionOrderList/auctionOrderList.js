@@ -26,7 +26,7 @@ router.post('/pageSelectAuctionOrderList', bodyParser.json(), async (req, res, n
   res.json(Result.resultHandle(selectResult, total))
 })
 
-// 更新拍品订单信息 (新增和更新操作)
+// 更新拍品订单信息
 router.post('/updateAuctionOrderMes', bodyParser.json(), async (req, res, next) => {
   let orderId = req.body.id
   if (orderId === undefined) {
@@ -37,12 +37,6 @@ router.post('/updateAuctionOrderMes', bodyParser.json(), async (req, res, next) 
   req.body.aucId ? (tempObject.aucId = req.body.aucId) : null
   req.body.userId ? (tempObject.userId = req.body.userId) : null
   req.body.state ? (tempObject.state = req.body.state) : null
-  // 查询是否存在该aucId，如果没有则转换成新增操作
-  let hasorderId = await db.select('id', 'auctionOrder', { id: orderId })
-  if (hasorderId.length === 0) {
-    let insertResult = await db.insert(tempObject, 'auctionOrder')
-    return res.json(Result.resultHandle(insertResult))
-  }
   // 2.执行update操作
   let updateResult = await db.update(tempObject, 'auctionOrder', { id: orderId })
   // 3.返回成功或失败

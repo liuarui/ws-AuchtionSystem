@@ -44,6 +44,7 @@ router.post('/updateAuctionMes', bodyParser.json(), async (req, res, next) => {
   // 查询是否存在该aucId，如果没有则转换成新增操作
   let hasAucId = await db.select('aucId', 'auction', { aucId: aucId })
   if (hasAucId.length === 0) {
+    tempObject.aucId = aucId
     let insertResult = await db.insert(tempObject, 'auction')
     return res.json(Result.resultHandle(insertResult))
   }

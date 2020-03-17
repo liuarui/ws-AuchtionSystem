@@ -336,16 +336,16 @@ auctionOrder表
 
 请求参数：
 
-| 字段      | 说明 | 类型          | 是否必填       |
-| --------- | ---- | ------------- | -------------- |
-| name      |      | 否（默认为1） | 否             |
-| price     |      | Number        | 否（默认为10） |
-| provider  |      | String        | 否             |
-| state     |      | Number        | 否             |
-| ownerId   |      | Number        | 否             |
-| startTime |      | date          | 否             |
-| endTime   |      | date          | 否             |
-| aucId     |      | Number        | 是             |
+| 字段      | 说明 | 类型          | 是否必填 |
+| --------- | ---- | ------------- | -------- |
+| name      |      | 否（默认为1） | 否       |
+| price     |      | Number        | 否       |
+| provider  |      | String        | 否       |
+| state     |      | Number        | 否       |
+| ownerId   |      | Number        | 否       |
+| startTime |      | date          | 否       |
+| endTime   |      | date          | 否       |
+| aucId     |      | Number        | 是       |
 
 返回参数：
 
@@ -530,29 +530,7 @@ auctionOrder表
 | ----- | -------- | ---- | -------- |
 | value | 所有字段 | []   | 是       |
 
-###### 4.3.2*新增或修改用户信息*
-
-请求地址/api/admin/userStar/updateUserStarMes
-
-方法：POST
-
-是否需要请求头携带[authorization]：是
-
-请求参数：
-
-| 字段   | 说明 | 类型   | 是否必填 |
-| ------ | ---- | ------ | -------- |
-| id     |      | Number | 是       |
-| aucId  |      | Number | 否       |
-| userId |      | Number | 否       |
-
-返回参数：
-
-| 字段 | 说明                  | 类型   | 是否必填 |
-| ---- | --------------------- | ------ | -------- |
-| code | 0修改失败，-1修改成功 | Number | 是       |
-
-###### 4.3.3 根据username删除用户
+###### 4.3.2 根据username删除用户
 
 请求地址/api/admin/userStar/deleteUserStarMes
 
