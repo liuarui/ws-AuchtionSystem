@@ -65,5 +65,17 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
     }
   })
 })
-
+// 登出
+router.all('/logout', (req, res, next) => {
+  // 1.将token加入黑名单，校验token 前先确定是否在黑名单中存在，存在则token失效
+  let token = req.headers['authorization']
+  Token.revokedToken(token)
+    .then(data => {
+      // 2. 返回注销成功
+      res.json(Result.jsonResult({ revokedToken: data }, '注销成功', true, [], -1))
+    })
+    .catch(err => {
+      res.json(Result.jsonResult({ err: err }, '注销失败', true, [], 0))
+    })
+})
 module.exports = router

@@ -77,7 +77,7 @@ class Database {
       }
       // 特殊查询 条件查询
       if (parms === false){
-        let result = query(`SELECT ${prop} FROM ${table} ${otherParms}`)
+        let result = query(`SELECT sql_calc_found_rows ${prop} FROM ${table} ${otherParms}`)
         resolve(result)
       }
       // WHERE 单条件查询

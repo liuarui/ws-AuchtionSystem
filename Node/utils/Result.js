@@ -18,7 +18,7 @@ class Result {
       msg: msg,
     }
   }
-  resultHandle(oldResult) {
+  resultHandle(oldResult, otherParm = '') {
     if (oldResult.length === 0 || oldResult === 0) {
       // 结果为空
       return this.jsonResult({}, '结果为空！', true, [], 0)
@@ -28,9 +28,12 @@ class Result {
     } else if (oldResult === 3) {
       // 数据冲突！
       return this.jsonResult({}, '数据冲突！', true, [], 3)
-    } else {
-      // 请求成功！
+    } else if (otherParm === '') {
+      // 请求成功！不带totel
       return this.jsonResult({}, '请求成功！', true, oldResult, -1)
+    } else {
+      //请求成功带total
+      return this.jsonResult(otherParm, '请求成功！', true, oldResult, -1)
     }
   }
 }

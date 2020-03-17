@@ -19,8 +19,11 @@ router.post('/pageSelectAuctionOrderList', bodyParser.json(), async (req, res, n
   let second = page * size
   // 2. 查询拍品表
   let selectResult = await db.select('*', 'auctionOrder', false, `LIMIT ${first},${second}`)
+  // 查询总数
+  let count = await db.select('count(*)', 'auctionOrder')
+  let total = { pageTotal: count[0]['count(*)'], page: page, size: size }
   // 3. 根据参数返回相应数据
-  res.json(Result.resultHandle(selectResult))
+  res.json(Result.resultHandle(selectResult, total))
 })
 
 // 更新拍品订单信息 (新增和更新操作)

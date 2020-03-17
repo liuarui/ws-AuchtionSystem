@@ -32,8 +32,19 @@ app.set('view engine', 'html')
 // 项目配置中间件
 app.use(logger('dev')) // 控制台日志
 app.use('/static', express.static(path.join(__dirname, 'public'))) // 挂载静态资源路径
+app.use(express.static(path.join(__dirname, 'views'))) // 挂载vue后台管理页面路径
 
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// 设置跨域请求
+app.all('*', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild')
+  res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
+  res.header('X-Powered-By', ' 3.2.1')
+  res.header('Content-Type', 'application/json;charset=utf-8')
+  next()
+})
 
 // 解析token获取用户信息
 app.use((req, res, next) => {
@@ -43,7 +54,7 @@ app.use((req, res, next) => {
   } else {
     Token.verToken(token)
       .then(data => {
-        console.log('解析token用户数据为：',data)
+        console.log('解析token用户数据为：', data)
         req.data = data
         return next()
       })

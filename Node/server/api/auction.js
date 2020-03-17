@@ -18,7 +18,7 @@ router.post('/', bodyParser.json(), async (req, res, next) => {
   // 3. 返回数据
   res.json(Result.resultHandle(selectResult))
 })
-// 分页查询拍品表 
+// 分页查询拍品表
 router.post('/pageSelectAuctionList', bodyParser.json(), async (req, res, next) => {
   // 1. 接收参数page,size
   let page = req.body.page ? req.body.page : 1
@@ -27,7 +27,10 @@ router.post('/pageSelectAuctionList', bodyParser.json(), async (req, res, next) 
   let second = page * size
   // 2. 查询拍品表
   let selectResult = await db.select('aucId,name,price,provider,state,startTime,endTime', 'auction', false, `LIMIT ${first},${second}`)
+  // 查询总数
+  let count = await db.select('count(aucId,name,price,provider,state,startTime,endTime)', 'auction')
+  let total = { pageTotal: count[0]['count(aucId,name,price,provider,state,startTime,endTime)'], page: page, size: size }
   // 3. 根据参数返回相应数据
-  res.json(Result.resultHandle(selectResult))
+  res.json(Result.resultHandle(selectResult, total))
 })
 module.exports = router

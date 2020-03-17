@@ -18,8 +18,11 @@ router.post('/pageSelectUserStarList', bodyParser.json(), async (req, res, next)
   let second = page * size
   // 2. 查询用户收藏信息
   let selectResult = await db.select('*', 'userStar', false, `LIMIT ${first},${second}`)
+  // 查询总数
+  let count = await db.select('count(*)', 'userStar')
+  let total = { pageTotal: count[0]['count(*)'], page: page, size: size }
   // 3. 根据参数返回相应数据
-  res.json(Result.resultHandle(selectResult))
+  res.json(Result.resultHandle(selectResult, total))
 })
 
 // 更新用户收藏信息 (新增和更新操作)

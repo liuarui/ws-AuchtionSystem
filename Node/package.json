@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "set DEBUG=express:* & node app.js",
-    "go": "node app.js"
+    "go": "node app.js",
+    "deploy": "scp -r ./config ./ public ./ routes ./server ./utils ./views ./app.js ./package.json ./yarn.lock root@101.132.157.78:~/AuctionSystem/1"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",

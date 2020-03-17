@@ -20,8 +20,11 @@ router.post('/pageSelectUserList', bodyParser.json(), async (req, res, next) => 
   let second = page * size
   // 2. 查询用户表
   let selectResult = await db.select('*', 'user', false, `LIMIT ${first},${second}`)
+  // 查询总数
+  let count = await db.select('count(*)', 'user')
+  let total = { pageTotal: count[0]['count(*)'], page: page, size: size }
   // 3. 根据参数返回相应数据
-  res.json(Result.resultHandle(selectResult))
+  res.json(Result.resultHandle(selectResult, total))
 })
 // 删除用户
 router.post('/deleteUser', bodyParser.json(), async (req, res, next) => {

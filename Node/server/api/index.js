@@ -20,7 +20,9 @@ router.post('/pageSearchAuction', bodyParser.json(), async (req, res, next) => {
   let second = page * size
   // 2. 查询拍品表
   let selectResult = await db.select('aucId,name,price,provider,state,startTime,endTime', 'auction', false, `WHERE name LIKE '%${keyword}%' LIMIT ${first},${second}`)
+  let count = await db.select('count(name)', 'auction', false, `WHERE name LIKE '%${keyword}%'`)
+  let total = { pageTotal: count[0]['count(name)'], page: page, size: size }
   // 3. 根据参数返回相应数据
-  res.json(Result.resultHandle(selectResult))
+  res.json(Result.resultHandle(selectResult, total))
 })
 module.exports = router
