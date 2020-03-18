@@ -6,9 +6,15 @@ const path = require('path')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-// const session = require('express-session')
 const expressJwt = require('express-jwt')
 
+//https
+const fs = require('fs')
+const http = require('http')
+const https = require('https')
+const privateKey = fs.readFileSync('./https/3411328_liuarui.top.key', 'utf8')
+const certificate = fs.readFileSync('./https/3411328_liuarui.top.pem', 'utf8')
+const credentials = { key: privateKey, cert: certificate }
 // 引入api路由模块
 const indexRoute = require('./server/api/index')
 const usersRoute = require('./server/api/users')
@@ -89,4 +95,8 @@ app.use('/api/users', usersRoute)
 app.use('/api/auction', auctionRoute)
 app.use('/api/admin', adminRoute)
 
-app.listen(3000)
+const httpServer = http.createServer(app)
+const httpsServer = https.createServer(credentials, app)
+
+httpServer.listen(8080)
+httpsServer.listen(8443)

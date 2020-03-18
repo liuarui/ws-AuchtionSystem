@@ -4,6 +4,7 @@ config/dbConfig.js
 logs
 *.log
 npm-debug.log*
+https
 # Runtime data
 pids
 *.pid

@@ -70,7 +70,6 @@ export default {
           this.$message.success('登录成功')
         } else {
           this.$message.error('请输入账号和密码')
-          console.log('error submit!!')
           return false
         }
       })
