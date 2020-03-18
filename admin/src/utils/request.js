@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../store/index'
 
 const service = axios.create({
-  baseURL: 'http://liuarui.top:3000/api/admin',
+  baseURL: 'https://liuarui.top:8443/api/admin',
   timeout: 5000,
 })
 
@@ -19,8 +19,8 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    console.log(error)
-    return Promise.reject()
+    // console.log(error)
+    Promise.reject(error)
   },
 )
 
@@ -36,8 +36,8 @@ service.interceptors.response.use(
     // }
   },
   error => {
-    console.log('请求发生错误', error)
-    return Promise.reject()
+    // console.log('请求发生错误',error )
+    Promise.reject(error)
   },
 )
 
