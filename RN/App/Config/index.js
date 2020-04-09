@@ -1,10 +1,13 @@
+/*
+  通用配置文件
+*/
 import {
   Platform,
   StatusBar
 } from 'react-native'
 
 const Skin = {
-    mainColor: '#ff9800',
+    mainColor: '#e0223c',
     viewsBackgroundColor: '#f8f8f8',
     androidHeader: {
       height: 44,
@@ -13,8 +16,7 @@ const Skin = {
   },
 
   App = {
-    devBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
-    prodBaseUrl: 'https://raw.githubusercontent.com/BelinChung/api-mock/master/HiApp',
+    baseUrl: 'https://liuarui.top:8443/api',
     defaultNavigation: {
       headerStyle: {
         ...Platform.select({

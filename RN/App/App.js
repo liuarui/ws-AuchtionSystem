@@ -1,3 +1,7 @@
+/*
+  入口文件
+*/
+
 import React, { Component } from 'react'
 import { Text, StatusBar } from 'react-native'
 import { Provider } from 'react-redux' // 引入redux容器

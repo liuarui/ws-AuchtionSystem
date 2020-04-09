@@ -2,11 +2,12 @@ module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
   plugins: [
     [
-      "@babel/plugin-proposal-decorators",
+      '@babel/plugin-proposal-decorators',
       {
-        "legacy": true
-      }
+        legacy: true,
+      },
     ],
+    ["import", { libraryName: "@ant-design/react-native" }],
     [
       'module-resolver',
       {
@@ -22,6 +23,7 @@ module.exports = {
           '@Modals': './App/Modals',
           '@Store': './App/Store',
           '@assets': './App/assets',
+          '@Api': './App/Api',
         },
       },
     ],

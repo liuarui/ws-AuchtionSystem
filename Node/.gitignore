@@ -1,10 +1,14 @@
 # 数据库配置文件
 config/dbConfig.js
+
+#https秘钥
+https
+
 # Logs
 logs
 *.log
 npm-debug.log*
-https
+
 # Runtime data
 pids
 *.pid

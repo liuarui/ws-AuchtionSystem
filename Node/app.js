@@ -15,6 +15,7 @@ const https = require('https')
 const privateKey = fs.readFileSync('./https/3411328_liuarui.top.key', 'utf8')
 const certificate = fs.readFileSync('./https/3411328_liuarui.top.pem', 'utf8')
 const credentials = { key: privateKey, cert: certificate }
+
 // 引入api路由模块
 const indexRoute = require('./server/api/index')
 const usersRoute = require('./server/api/users')

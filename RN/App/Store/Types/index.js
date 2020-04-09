@@ -1,9 +1,5 @@
-import * as app from './app';
-import * as home from './home';
-import * as contacts from './contacts';
+import * as app from './app'
 
 export default {
   ...app,
-  ...home,
-  ...contacts,
-};
+}
