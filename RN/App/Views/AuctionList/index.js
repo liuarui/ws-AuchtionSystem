@@ -1,39 +1,55 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
+import { StyleSheet, TouchableHighlight, Image, Text, View } from 'react-native'
 import connect from 'redux-connect-decorator'
-import { View, Text, Animated, Easing, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 // 本地引入
 import config from '@Config'
-import styles from '@Styles'
 import { setModalVisibleStatus } from '@Store/Actions'
-
-// @connect(
-//   state => ({
-//     timeline: state.home.timeline,
-//   }),
-//   {
-//     setModalVisibleStatus,
-//   },
-// )
+import CountDownReact from '@Components/CountDown'
 export default class AuctionListScreen extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      atime: new Date(2020, 4, 15),
+    }
   }
 
   componentDidMount() {}
 
   render() {
     return (
-      <View style={viewStyles.container}>
-        <Text>拍品瀑布流</Text>
+      <View style={[{ paddingTop: 40, marginTop: 70 }]}>
+        {/*2.*/}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'baseline',
+            marginTop: 20,
+          }}>
+          <Text style={viewStyles.cardItemTimeRemainTxt}>距离开始还剩</Text>
+          <CountDownReact
+            //date={new Date(parseInt(seckill.endTime))}
+            // date={'2020-4-19T00:00:00+08:00'}
+            date={this.state.atime}
+            days={{ plural: '天 ', singular: '天 ' }}
+            hours=":"
+            mins=":"
+            segs=""
+            daysStyle={viewStyles.cardItemTimeRemainTxt}
+            hoursStyle={viewStyles.cardItemTimeRemainTxt}
+            minsStyle={viewStyles.cardItemTimeRemainTxt}
+            secsStyle={viewStyles.cardItemTimeRemainTxt}
+            firstColonStyle={viewStyles.cardItemTimeRemainTxt}
+            secondColonStyle={viewStyles.cardItemTimeRemainTxt}
+          />
+        </View>
       </View>
     )
   }
 }
 
 const viewStyles = StyleSheet.create({
-  container: {
-    ...styles.container,
-    paddingTop: 5,
+  cardItemTimeRemainTxt: {
+    fontSize: 20,
+    color: '#ee394b',
   },
 })

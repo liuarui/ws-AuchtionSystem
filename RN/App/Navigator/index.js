@@ -17,7 +17,6 @@ import AuctionDetails from '@Views/AuctionList/AuctionDetails'
 import User from '@Views/User'
 import Login from '@Views/User/Login.js'
 import MyFavorite from '@Views/User/MyFavorite'
-import MyAuction from '@Views/User/MyAuction'
 import MyList from '@Views/User/MyList'
 import Setting from '@Views/User/Setting'
 /* 引入路由组件结束 */
@@ -64,15 +63,16 @@ function AppContainer() {
             <HomeStack.Navigator screenOptions={common}>
               <HomeStack.Screen name="Home" component={Home} options={{ title: '主页' }} />
               <HomeStack.Screen name="Search" component={Search} options={{ title: '搜索页' }} />
+              <HomeStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
             </HomeStack.Navigator>
           )}
         </Tab.Screen>
         <Tab.Screen name="AuctionTap" options={{ title: '精选拍品' }}>
           {() => (
-            <UserStack.Navigator screenOptions={common}>
-              <UserStack.Screen name="AuctionList" component={AuctionList} options={{ title: '精选拍品' }} />
-              <UserStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
-            </UserStack.Navigator>
+            <AuctionListStack.Navigator screenOptions={common} initialRouteName="AuctionDetails">
+              <AuctionListStack.Screen name="AuctionList" component={AuctionList} options={{ title: '精选拍品' }} />
+              <AuctionListStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
+            </AuctionListStack.Navigator>
           )}
         </Tab.Screen>
         <Tab.Screen name="UserTap" options={{ title: '我的' }}>
@@ -82,8 +82,8 @@ function AppContainer() {
               <UserStack.Screen name="User" component={User} options={{ title: '个人中心' }} />
               <UserStack.Screen name="MyList" component={MyList} options={{ title: '我的订单' }} />
               <UserStack.Screen name="MyFavorite" component={MyFavorite} options={{ title: '收藏' }} />
-              <UserStack.Screen name="MyAuction" component={MyAuction} options={{ title: '我的拍卖品' }} />
               <UserStack.Screen name="Setting" component={Setting} options={{ title: '设置' }} />
+              <UserStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
             </UserStack.Navigator>
           )}
         </Tab.Screen>

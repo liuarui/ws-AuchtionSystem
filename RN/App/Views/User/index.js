@@ -84,7 +84,7 @@ export default class HomeScreen extends React.Component {
             <Grid hasLine={false} data={listType} columnNum={4} onPress={(_el, index) => navigation.navigate('MyList', { type: index })} />
           </View>
         </View>
-        <UserCard title={'我的拍品'} toRoute={'MyAuction'} iconName={'ios-list'} />
+        {/* <UserCard title={'我的拍品'} toRoute={'MyAuction'} iconName={'ios-list'} /> */}
         <UserCard title={'我的收藏'} toRoute={'MyFavorite'} iconName={'ios-star'} />
         <UserCard title={'设置'} toRoute={'Setting'} iconName={'ios-settings'} />
       </View>
