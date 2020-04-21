@@ -207,7 +207,7 @@ export default class FavoriteCard extends React.Component {
                         <CountDownReact
                           //date={new Date(parseInt(seckill.endTime))}
                           // date={'2020-4-19T00:00:00+08:00'}
-                          date={this.state.atime}
+                          date={this.state.auction.startTime}
                           days={{ plural: '天 ', singular: '天 ' }}
                           hours=":"
                           mins=":"

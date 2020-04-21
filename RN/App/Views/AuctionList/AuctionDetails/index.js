@@ -1,6 +1,6 @@
 import React from 'react'
 import connect from 'redux-connect-decorator'
-import { View, Text, Animated, Image, Easing, FlatList, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, Animated, Image, Easing, Dimensions, FlatList, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Carousel } from '@ant-design/react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 // 本地引入
@@ -23,13 +23,13 @@ export default class AuctionDetailsScreen extends React.Component {
         aucId: 1,
         auction: {},
       }
-    }else{
-       this.state = {
-      aucId: props.route.params.aucId,
-      auction: {},
+    } else {
+      this.state = {
+        aucId: props.route.params.aucId,
+        auction: {},
+      }
     }
-    }
-   
+
     this.initAuctionData = this.initAuctionData.bind(this)
   }
   // 初始化拍品详情数据
@@ -50,6 +50,16 @@ export default class AuctionDetailsScreen extends React.Component {
     /* tslint:disable: no-console */
     console.log('vertical change to', index)
   }
+  imgHeight() {
+    let myHeight = 250
+    let screenWidth = Dimensions.get('window').width
+    Image.getSize('https://facebook.github.io/react-native/img/tiny_logo.png', (width, height) => {
+      //width 图片的宽度
+      //height 图片的高度
+      myHeight = Math.floor((screenWidth / width) * height)
+    })
+    return myHeight
+  }
   componentDidMount() {}
 
   render() {
@@ -60,19 +70,19 @@ export default class AuctionDetailsScreen extends React.Component {
             {/* 轮播图 */}
             <Carousel style={styles.wrapper} selectedIndex={2} infinite afterChange={this.onHorizontalSelectedIndexChange}>
               <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: 50, height: 50 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
               </View>
               <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: 50, height: 50 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
               </View>
               <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: 50, height: 50 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
               </View>
               <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: 50, height: 50 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
               </View>
               <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: 50, height: 50 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
               </View>
             </Carousel>
           </View>

@@ -10,7 +10,7 @@ drop table if exists auctionOrder;
 drop table if exists userStar;
 drop table if exists auction;
 drop table if exists user;
-
+-- 用户表
 create table user
 (
     userId      bigint unsigned  NOT NULL AUTO_INCREMENT,
@@ -24,13 +24,16 @@ create table user
     updateTime  DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (userId)
 ) ENGINE = InnoDB;
-
+-- 拍品表
 create table auction
 (
     aucId        bigint unsigned  NOT NULL UNiQUE AUTO_INCREMENT,
     name         varchar(200)     NOT NULL,
     price        DECIMAL(10, 2)   NOT NULL,
     provider     varchar(200)     NOT NULL,
+    easyImgUrl   varchar(200)     NOT NULL DEFAULT 'https://s1.ax1x.com/2020/04/21/J3cT0S.jpg',
+    imgArrayUrl  varchar(400)     NOT NULL DEFAULT 'https://s1.ax1x.com/2020/04/21/J3gyj0.jpg;https://s1.ax1x.com/2020/04/21/J3cT0S.jpg',
+    desc         varchar(400)     NOT NULL DEFAULT '默认商品描述，可进行修改',
     state        integer unsigned NOT NULL COMMENT '0为上架中 1为已下架 2为已售出下架',
     ownerId      bigint unsigned  NOT NULL,
     startTime    DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '拍卖开始时间',
@@ -40,7 +43,7 @@ create table auction
     PRIMARY KEY (aucId),
     constraint fk_auction_ownerId foreign key (ownerId) references user (userId)
 ) ENGINE = InnoDB;
-
+-- 用户收藏表
 create table userStar
 (
     id         bigint unsigned  NOT NULL AUTO_INCREMENT,
@@ -53,7 +56,7 @@ create table userStar
     constraint fk_userStar_aucId  foreign key (aucId)  references auction (aucId),
     constraint uk_star_aucId_userId unique key (aucId, userId)
 ) ENGINE = InnoDB;
-
+--用户拍品订单表
 create table auctionOrder
 (
     -- id为订单号

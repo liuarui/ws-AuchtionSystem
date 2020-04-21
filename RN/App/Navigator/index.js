@@ -69,7 +69,7 @@ function AppContainer() {
         </Tab.Screen>
         <Tab.Screen name="AuctionTap" options={{ title: '精选拍品' }}>
           {() => (
-            <AuctionListStack.Navigator screenOptions={common} initialRouteName="AuctionDetails">
+            <AuctionListStack.Navigator screenOptions={common} initialRouteName="AuctionList">
               <AuctionListStack.Screen name="AuctionList" component={AuctionList} options={{ title: '精选拍品' }} />
               <AuctionListStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
             </AuctionListStack.Navigator>
