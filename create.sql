@@ -6,11 +6,12 @@ show variables like '%time_zone%';
 create database if not exists auction;
 use auction;
 
+drop table if exists auctionRecord;
 drop table if exists auctionOrder;
 drop table if exists userStar;
 drop table if exists auction;
 drop table if exists user;
--- 用户表
+
 create table user
 (
     userId      bigint unsigned  NOT NULL AUTO_INCREMENT,
@@ -24,16 +25,16 @@ create table user
     updateTime  DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (userId)
 ) ENGINE = InnoDB;
--- 拍品表
+
 create table auction
 (
     aucId        bigint unsigned  NOT NULL UNiQUE AUTO_INCREMENT,
     name         varchar(200)     NOT NULL,
-    price        DECIMAL(10, 2)   NOT NULL,
+    price        DECIMAL(10, 2)   NOT NULL COMMENT '起拍价',
     provider     varchar(200)     NOT NULL,
     easyImgUrl   varchar(200)     NOT NULL DEFAULT 'https://s1.ax1x.com/2020/04/21/J3cT0S.jpg',
-    imgArrayUrl  varchar(400)     NOT NULL DEFAULT 'https://s1.ax1x.com/2020/04/21/J3gyj0.jpg;https://s1.ax1x.com/2020/04/21/J3cT0S.jpg',
-    desc         varchar(400)     NOT NULL DEFAULT '默认商品描述，可进行修改',
+    imgArrayUrl  varchar(200)     NOT NULL DEFAULT 'https://s1.ax1x.com/2020/04/21/J3gyj0.jpg;https://s1.ax1x.com/2020/04/21/J3cT0S.jpg',
+    aucDesc      varchar(200)     NOT NULL DEFAULT '默认商品描述',
     state        integer unsigned NOT NULL COMMENT '0为上架中 1为已下架 2为已售出下架',
     ownerId      bigint unsigned  NOT NULL,
     startTime    DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '拍卖开始时间',
@@ -43,7 +44,7 @@ create table auction
     PRIMARY KEY (aucId),
     constraint fk_auction_ownerId foreign key (ownerId) references user (userId)
 ) ENGINE = InnoDB;
--- 用户收藏表
+
 create table userStar
 (
     id         bigint unsigned  NOT NULL AUTO_INCREMENT,
@@ -56,14 +57,14 @@ create table userStar
     constraint fk_userStar_aucId  foreign key (aucId)  references auction (aucId),
     constraint uk_star_aucId_userId unique key (aucId, userId)
 ) ENGINE = InnoDB;
---用户拍品订单表
+
 create table auctionOrder
 (
     -- id为订单号
     id         bigint unsigned  NOT NULL AUTO_INCREMENT,
     aucId      bigint unsigned  NOT NULL ,
     userId     bigint unsigned  NOT NULL ,
-    type      integer unsigned NOT NULL COMMENT '0为竞拍成功 1为竞拍失败 2为交易进行中',
+    type       integer unsigned NOT NULL COMMENT '0为竞拍成功 1为竞拍失败 2为交易进行中',
     createTime DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建时间',
     updateTime DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (id),
@@ -71,19 +72,41 @@ create table auctionOrder
     constraint fk_auctionOrder_aucId  foreign key (aucId)  references auction (aucId)
 ) ENGINE = InnoDB;
 
+create table auctionRecord
+(
+    -- id为出价标识号
+    id         bigint unsigned  NOT NULL AUTO_INCREMENT,
+    aucId      bigint unsigned  NOT NULL ,
+    userId     bigint unsigned  NOT NULL ,
+    bid        DECIMAL(10, 2)   NOT NULL COMMENT '出价',
+    createTime DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建时间',
+    updateTime DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (id),
+    constraint fk_auctionRecord_userId foreign key (userId) references user (userId),
+    constraint fk_auctionRecord_aucId  foreign key (aucId)  references auction (aucId)
+) ENGINE = InnoDB;
+
 # dev data
 insert into user (username, name, password, roleId)
 values ('admin','管理员', '$2b$10$5T.oR1L1.Adwhgv4qzhpCOidSHtQzfDlwtpJCxCkGj10dIoM2xix2', 1);
 
+-- state        integer unsigned NOT NULL COMMENT '0为上架中 1为已下架 2为已售出下架',
 insert into auction (name, price, provider, state, ownerId)
 values ('测试拍品:上架中', 100, '管理员', 0, 1),
        ('测试拍品:已下架', 100.99, '管理员', 1, 1),
-       ('测试拍品:已售出下架', 100.99, '管理员', 2, 1);
+       ('测试拍品:已售出下架', 100.99, '管理员', 2, 1),
+       ('测试拍品1', 100.99, '管理员', 0, 1),
+       ('测试拍品2', 100.99, '管理员', 0, 1),
+       ('测试拍品3', 100.99, '管理员', 0, 1),
+       ('测试拍品4', 100.99, '管理员', 0, 1),
+       ('测试拍品5', 100.99, '管理员', 0, 1),
+       ('测试拍品6', 100.99, '管理员', 0, 1),
+       ('测试拍品7', 100.99, '管理员', 0, 1),
+       ('测试拍品8', 100.99, '管理员', 0, 1),
+       ('测试拍品9', 100.99, '管理员', 0, 1),
+       ('测试拍品10', 100.99, '管理员', 0, 1);
 
-insert into auctionOrder (aucId, userId, state)
-values (1,1,2),
-       (2,1,1),
-       (3,1,0);
+
 
 
 

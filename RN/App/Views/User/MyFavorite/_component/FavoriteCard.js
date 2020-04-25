@@ -97,7 +97,7 @@ export default class FavoriteCard extends React.Component {
                 </View>
                 <View style={{ ...viewStyles.cardBody, ...bor }}>
                   <View style={{ flexGrow: 1 }}>
-                    <Image style={{ width: 180, height: 180 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                    <Image style={{ width: 180, height: 180 }} source={{ uri: this.state.auction.easyImgUrl }} />
                   </View>
                   <View style={{ ...bor, ...viewStyles.bodyRight }}>
                     <Text style={viewStyles.bodyRightText}>{this.state.auction.name ? this.state.auction.name : '商品名称加载中'}</Text>
@@ -151,7 +151,7 @@ export default class FavoriteCard extends React.Component {
                 </View>
                 <View style={{ ...viewStyles.cardBody, ...bor }}>
                   <View style={{ flexGrow: 1 }}>
-                    <Image style={{ width: 180, height: 180 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                    <Image style={{ width: 180, height: 180 }} source={{ uri: this.state.auction.easyImgUrl }} />
                   </View>
                   <View style={{ ...bor, ...viewStyles.bodyRight }}>
                     <Text style={viewStyles.bodyRightText}>{this.state.auction.name ? this.state.auction.name : '商品名称加载中'}</Text>
@@ -192,7 +192,7 @@ export default class FavoriteCard extends React.Component {
                 </View>
                 <View style={{ ...viewStyles.cardBody, ...bor }}>
                   <View style={{ flexGrow: 1 }}>
-                    <Image style={{ width: 180, height: 180 }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
+                    <Image style={{ width: 180, height: 180 }} source={{ uri: this.state.auction.easyImgUrl }} />
                   </View>
                   <View style={{ ...bor, ...viewStyles.bodyRight }}>
                     <Text style={viewStyles.bodyRightText}>{this.state.auction.name ? this.state.auction.name : '商品名称加载中'}</Text>

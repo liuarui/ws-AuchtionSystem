@@ -14,7 +14,7 @@ router.post('/', bodyParser.json(), async (req, res, next) => {
   // 1. 接收参数(aucId)
   let aucId = req.body.aucId
   // 2. 用该参数去查询拍品数据库
-  let selectResult = await db.select('aucId,name,price,provider,state,startTime,endTime', 'auction', { aucId: aucId })
+  let selectResult = await db.select('*', 'auction', { aucId: aucId })
   // 3. 返回数据
   res.json(Result.resultHandle(selectResult))
 })
@@ -26,10 +26,10 @@ router.post('/pageSelectAuctionList', bodyParser.json(), async (req, res, next) 
   let first = (page - 1) * size
   let second = page * size
   // 2. 查询拍品表
-  let selectResult = await db.select('aucId,name,price,provider,state,startTime,endTime', 'auction', false, `LIMIT ${first},${second}`)
+  let selectResult = await db.select('*', 'auction', false, `LIMIT ${first},${second}`)
   // 查询总数
-  let count = await db.select('count(aucId,name,price,provider,state,startTime,endTime)', 'auction')
-  let total = { pageTotal: count[0]['count(aucId,name,price,provider,state,startTime,endTime)'], page: page, size: size }
+  let count = await db.select('count(*)', 'auction')
+  let total = { pageTotal: count[0]['*)'], page: page, size: size }
   // 3. 根据参数返回相应数据
   res.json(Result.resultHandle(selectResult, total))
 })

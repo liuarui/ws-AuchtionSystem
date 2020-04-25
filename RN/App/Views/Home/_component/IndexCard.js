@@ -3,23 +3,22 @@ import { View, Text, Image, ToastAndroid, Dimensions, Animated, Easing, FlatList
 import { useNavigation } from '@react-navigation/native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import styles from '@Styles'
-import { filterAuctonState } from '@Utils/dictionary'
 import { star } from '@Api/user'
 import { getAuction } from '@Api/auction'
 import starTrue from '@assets/star/starTrue.png'
 import starFalse from '@assets/star/starFalse.png'
 
-export default class ListCard extends React.Component {
+export default class IndexCard extends React.Component {
   constructor(props) {
     super(props)
-    let cT = new Date(props.order.createTime).toLocaleString()
+    let sT = new Date(props.order.startTime).toLocaleString()
+    console.log(7788,sT)
     // console.log(new Date(cT).getTime())
-    console.log(66666, cT)
     this.state = {
       id: props.order.id,
       aucId: props.order.aucId,
       aucState: props.order.type,
-      cTime: cT,
+      sTime: sT,
       star: props.order.star,
       auction: {},
     }
@@ -64,8 +63,7 @@ export default class ListCard extends React.Component {
           }}>
           <View style={viewStyles.card}>
             <View style={viewStyles.cardTop}>
-              <Text style={viewStyles.cardTopTime}>{this.state.cTime}</Text>
-              <Text style={viewStyles.cardTopState}>{filterAuctonState(aucState)}</Text>
+              <Text style={viewStyles.cardTopTime}>开始时间:{this.state.sTime}</Text>
             </View>
             <View style={{ ...viewStyles.cardBody, ...bor }}>
               <View style={{ flexGrow: 1 }}>
@@ -131,9 +129,9 @@ const viewStyles = StyleSheet.create({
   },
   bodyRightButton: {
     backgroundColor: '#e02323',
-    fontSize: 22,
-    height: 30,
-    width: 150,
+    fontSize:22,
+    height:30,
+    width:150,
     borderRadius: 5,
     color: '#fff',
   },

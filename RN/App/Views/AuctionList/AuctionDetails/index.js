@@ -18,6 +18,7 @@ import { getAuction } from '@Api/auction'
 export default class AuctionDetailsScreen extends React.Component {
   constructor(props) {
     super(props)
+    // 处理未传参跳转情况错误
     if (props.route.params === undefined) {
       this.state = {
         aucId: 1,
@@ -69,43 +70,40 @@ export default class AuctionDetailsScreen extends React.Component {
           <View>
             {/* 轮播图 */}
             <Carousel style={styles.wrapper} selectedIndex={2} infinite afterChange={this.onHorizontalSelectedIndexChange}>
-              <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
-              </View>
-              <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
-              </View>
-              <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
-              </View>
-              <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
-              </View>
-              <View style={[styles.containerHorizontal]}>
-                <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }} />
-              </View>
+              {`${this.state.auction.imgArrayUrl}`.split(';').map((value,index) => {
+                return(
+                  <View style={[styles.containerHorizontal]}>
+                    <Image style={{ width: Dimensions.get('window').width, height: this.imgHeight() }} source={{ uri: value }} />
+                  </View>
+                )
+              })}
             </Carousel>
           </View>
-          <Text style={{ height: 58, fontSize: 18, borderBottomColor: '#111', borderWidth: 1, borderStyle: 'solid', marginBottom: 5 }}>{this.state.auction.name}</Text>
-          <View style={{ height: 50, flexDirection: 'row', borderBottomColor: '#111', borderWidth: 1, borderStyle: 'solid' }}>
-            <Text style={{ lineHeight: 20 }}>
+          <Text style={{ height: 58, fontSize: 18,  marginBottom: 5 }}>{this.state.auction.name}</Text>
+          <View style={{ height: 50, flexDirection: 'row',}}>
+            <Text style={{ lineHeight: 20, flex: 1 }}>
               ` RMB {'\n'}`<Text style={{ color: '#e02323' }}>起拍价：</Text>
             </Text>
-            <Text style={{ lineHeight: 50, fontSize: 40, fontWeight: '700', color: '#e02323' }}>{this.state.auction.price}</Text>
+            <Text style={{ lineHeight: 50, fontSize: 40, fontWeight: '700', color: '#e02323', flex: 4 }}>{this.state.auction.price}</Text>
             {/* todo收藏颜色变化 */}
-            <View style={{ position: 'relative', right: -150 }}>
-              <Ionicons name={'ios-star'} size={26} style={{ color: '#e02235' }} />
-              <Text>收藏</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                '收藏逻辑'
+              }}>
+              <View style={{ flex: 2, marginRight: 20 }}>
+                <Ionicons name={'ios-star'} size={26} style={{ color: '#e02235' }} />
+                <Text>收藏</Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <Text style={{ marginBottom: 5, color: '#999999', borderBottomColor: '#111', borderWidth: 1, borderStyle: 'solid' }}>收藏人数:</Text>
           <View style={{ height: 150, color: '#999999', borderBottomColor: '#111', borderWidth: 1, borderStyle: 'solid' }}>
             <Text style={{ fontSize: 18, borderBottomColor: '#999999', borderWidth: 1, borderStyle: 'solid' }}>{`拍卖记录 | ${6}条`}</Text>
           </View>
           <View style={{ height: 50, color: '#999999', borderBottomColor: '#111', borderWidth: 1, borderStyle: 'solid' }}>
-            <Text style={{ fontSize: 18, lineHeight: 50 }}>{`提供者： ${6}`}</Text>
+            <Text style={{ fontSize: 18, lineHeight: 50 }}>{`提供者： ${this.state.auction.provider}`}</Text>
           </View>
-          <Text>拍品描述拍品描述拍品描述拍品描述拍品描述拍品描述拍品描述拍品描述拍品描述拍品描述拍品描述</Text>
+          <Text>{this.state.auction.aucDesc}</Text>
         </View>
       </ScrollView>
     )
