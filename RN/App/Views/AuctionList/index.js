@@ -21,7 +21,7 @@ export default class AuctionListScreen extends React.Component {
   }
 
   async init() {
-    let result = await pageSelectAuction({ data: { page: this.state.page, size: 3 } })
+    let result = await pageSelectAuction({ data: { page: this.state.page, size: 8 } })
     if (result.value.length === 0) {
       ToastAndroid.showWithGravity('没有了哦', ToastAndroid.SHORT, ToastAndroid.CENTER)
       return
@@ -47,9 +47,22 @@ export default class AuctionListScreen extends React.Component {
     let y = event.nativeEvent.contentOffset.y
     let height = event.nativeEvent.layoutMeasurement.height
     let contentHeight = event.nativeEvent.contentSize.height
-    // console.log('offsetY-->' + y)
-    // console.log('height-->' + height)
-    // console.log('contentHeight-->' + contentHeight)
+    console.log('offsetY-->' + y)
+    console.log('height-->' + height)
+    console.log('contentHeight-->' + contentHeight)
+    // if (y + height <= contentHeight - 100) {
+    //   ToastAndroid.showWithGravity('上拉刷新', ToastAndroid.SHORT, ToastAndroid.CENTER)
+    //   this.setState(
+    //     {
+    //       page: this.state.page + 1,
+    //       loadMore: true,
+    //     },
+    //     () => {
+    //       this.init()
+    //       console.log(this.state.page)
+    //     },
+    //   )
+    // }
     if (y + height >= contentHeight - 100) {
       ToastAndroid.showWithGravity('下拉刷新', ToastAndroid.SHORT, ToastAndroid.CENTER)
       this.setState(

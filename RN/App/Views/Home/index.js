@@ -36,7 +36,7 @@ export default class HomeScreen extends React.Component {
   }
   // 初始化数据
   async initData() {
-    const data = await pageSelectAuction()
+    const data = await pageSelectAuction({ data: {size: 5 } })
 
     if (data.status === 401) {
       ToastAndroid.showWithGravity('用户认证失效，将前往登录页', ToastAndroid.SHORT, ToastAndroid.CENTER)

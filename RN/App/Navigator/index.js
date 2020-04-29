@@ -13,6 +13,7 @@ import Search from '@Views/Home/Search'
 // 拍品瀑布流部分
 import AuctionList from '@Views/AuctionList'
 import AuctionDetails from '@Views/AuctionList/AuctionDetails'
+import AuctionRecord from '@Views/AuctionList/AuctionRecord'
 // 个人中心部分
 import User from '@Views/User'
 import Login from '@Views/User/Login.js'
@@ -64,14 +65,16 @@ function AppContainer() {
               <HomeStack.Screen name="Home" component={Home} options={{ title: '主页' }} />
               <HomeStack.Screen name="Search" component={Search} options={{ title: '搜索页' }} />
               <HomeStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
+              <HomeStack.Screen name="AuctionRecord" component={AuctionRecord} options={{ title: '出价记录' }} />
             </HomeStack.Navigator>
           )}
         </Tab.Screen>
         <Tab.Screen name="AuctionTap" options={{ title: '精选拍品' }}>
           {() => (
-            <AuctionListStack.Navigator screenOptions={common} initialRouteName="AuctionList">
+            <AuctionListStack.Navigator screenOptions={common} initialRouteName="AuctionRecord">
               <AuctionListStack.Screen name="AuctionList" component={AuctionList} options={{ title: '精选拍品' }} />
               <AuctionListStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
+              <AuctionListStack.Screen name="AuctionRecord" component={AuctionRecord} options={{ title: '出价记录' }} />
             </AuctionListStack.Navigator>
           )}
         </Tab.Screen>
@@ -84,6 +87,7 @@ function AppContainer() {
               <UserStack.Screen name="MyFavorite" component={MyFavorite} options={{ title: '收藏' }} />
               <UserStack.Screen name="Setting" component={Setting} options={{ title: '设置' }} />
               <UserStack.Screen name="AuctionDetails" component={AuctionDetails} options={{ title: '拍品详情' }} />
+              <UserStack.Screen name="AuctionRecord" component={AuctionRecord} options={{ title: '出价记录' }} />
             </UserStack.Navigator>
           )}
         </Tab.Screen>
