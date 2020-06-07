@@ -5,7 +5,6 @@ export async function login(parms) {
     .post('/users/login', parms)
     .then(res => {
       const token = res.token
-
       console.log('登录请求成功，请求token为', token)
       return res
     })

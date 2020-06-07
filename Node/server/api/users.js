@@ -67,7 +67,7 @@ router.post('/login', bodyParser.json(), async (req, res, next) => {
     if (result === true) {
       // 2. 如果符合则返回登陆成功+token
       Token.setToken(uname, selectResult[0].userId).then((data) => {
-        return res.json(Result.jsonResult({ token: data }, '登陆成功'))
+        return res.json(Result.jsonResult({ token: data,userId:selectResult[0].userId }, '登陆成功'))
       })
     } else {
       // 3. 不成功返回登陆失败

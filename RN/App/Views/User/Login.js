@@ -56,12 +56,12 @@ export default class LoginScreen extends React.Component {
   async fetchLogin() {
     this.showLoading()
     let result = await login({ data: { username: this.state.username, password: this.state.password } })
-
     console.log(result)
     if (result.code === -1) {
       // 登录成功
       this.hideLoading()
       await AsyncStorage.setItem('token', result.token)
+      await AsyncStorage.setItem('userId', `${result.userId}`)
       ToastAndroid.showWithGravity('登录成功', ToastAndroid.SHORT, ToastAndroid.CENTER)
       this.props.navigation.reset({
         index: 0,
