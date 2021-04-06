@@ -2133,9 +2133,9 @@ supports-color@^5.3.0:
     has-flag "^3.0.0"
 
 systeminformation@^4.14.16:
-  version "4.22.3"
-  resolved "https://registry.npm.taobao.org/systeminformation/download/systeminformation-4.22.3.tgz#4342014a6cc0581d05075827407ff0d2f4cbad4f"
-  integrity sha1-Q0IBSmzAWB0FB1gnQH/w0vTLrU8=
+  version "4.34.19"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.34.19.tgz#c5f066cc043482686d95bbc554d52e6ec9e42367"
+  integrity sha512-ssUYQ0s1FFeb8EGtyCX/41cC/XaF84gbNAUfaUTziibx+xCAaR0zrOy0yZlnUrsWDQ+snp/Utl8cx8IdtrevrA==
 
 tar@^4.4.2:
   version "4.4.13"
